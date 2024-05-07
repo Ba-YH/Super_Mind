@@ -7,6 +7,9 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -23,6 +26,7 @@ public class Controller implements Initializable {
     private static TreeNode root;
     @FXML
     private JFXTreeView treeview;
+
     @FXML
     private JFXButton AddSon_Button;
     @FXML
@@ -41,7 +45,7 @@ public class Controller implements Initializable {
     private JFXButton Save_button;
     @FXML
     private JFXButton Open_button;
-    @FXML 
+    @FXML
     private JFXButton New_button;
     @FXML
     private JFXButton Export_button;
@@ -51,7 +55,6 @@ public class Controller implements Initializable {
     private Label Hint;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         //初始化根节点
         root = new TreeNode("主题1");
         Scrollpane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
@@ -62,7 +65,6 @@ public class Controller implements Initializable {
         root.initNode(root,A1);
         treeview.setRoot(root.getView());
         Menubar.setSpacing(10);
-        //
         AddSon_Button.setOnAction(event -> {//添加节点按键
             if (CurNode == null) {
                 Draw.setHint(Hint,"请选择一个节点");
@@ -241,6 +243,19 @@ public class Controller implements Initializable {
                 FileManger fm=new FileManger();
                 fm.export(A1,file);
                 Draw.setHint(Hint,"导出成功");
+            }
+        });
+
+        //为面板设立按钮的键盘触发事件
+        Scrollpane.setOnKeyPressed(event -> {
+            if(event.getCode() == KeyCode.ENTER && event.isShiftDown() && event.isControlDown()){
+                AddBro_Button.fire();
+            }else if (event.getCode() == KeyCode.ENTER && event.isControlDown()) {
+                AddSon_Button.fire();
+            }else if(event.getCode() == KeyCode.DELETE && event.isShiftDown() && event.isControlDown()){
+                Del_Button.fire();
+            }else if(event.getCode() == KeyCode.O && event.isControlDown()){
+                Open_button.fire();
             }
         });
     }
