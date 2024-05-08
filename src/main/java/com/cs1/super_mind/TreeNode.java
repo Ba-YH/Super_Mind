@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import static com.cs1.super_mind.Draw.*;
 
 public class TreeNode extends TextField implements Serializable {
-    //
     public static double LBlockLen=Draw.RecH;
     public static double RBlockLen=Draw.RecH;
     public static double LMaxLinkLen;

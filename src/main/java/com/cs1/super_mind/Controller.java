@@ -42,6 +42,8 @@ public class Controller implements Initializable {
     @FXML
     private ScrollPane Scrollpane;
     @FXML
+    private JFXButton File_button;
+    @FXML
     private JFXButton Save_button;
     @FXML
     private JFXButton Open_button;
@@ -53,31 +55,34 @@ public class Controller implements Initializable {
     private JFXNodesList Menubar;
     @FXML
     private Label Hint;
+
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
         //初始化根节点
         root = new TreeNode("主题1");
-        Scrollpane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        Scrollpane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);//滚动条
         root.setIsroot(true);
         root.setLayoutX(500);
         root.setLayoutY(310);
         A1.getChildren().add(root);
-        root.initNode(root,A1);
+        root.initNode(root, A1);
         treeview.setRoot(root.getView());
         Menubar.setSpacing(10);
+        //
         AddSon_Button.setOnAction(event -> {//添加节点按键
             if (CurNode == null) {
-                Draw.setHint(Hint,"请选择一个节点");
+                Draw.setHint(Hint, "请选择一个节点");
                 return;
             }
             TreeNode tmp = new TreeNode("子主题");
-            tmp.initNode(root,A1);
+            tmp.initNode(root, A1);
             if (CurNode.isRoot()) {
-                if(TreeNode.getLchildren().size()<TreeNode.getRchildren().size()){
+                if (TreeNode.getLchildren().size() < TreeNode.getRchildren().size()) {
                     TreeNode.getLchildren().add(tmp);
                     tmp.setType(-1);
-                }
-                else {
+                } else {
                     TreeNode.getRchildren().add(tmp);
                     tmp.setType(1);
                 }
@@ -89,26 +94,25 @@ public class Controller implements Initializable {
             }
             A1.getChildren().add(tmp);//添加节点
             A1.getChildren().add(tmp.getLine());//添加线
-            CurNode.getView().getChildren().add(tmp.getView());//添加试图
-            Draw.update(root,A1);
+            CurNode.getView().getChildren().add(tmp.getView());//添加视图
+            Draw.update(root, A1);
         });
         AddBro_Button.setOnAction(event -> {
             if (CurNode == null) {
-                Draw.setHint(Hint,"请选择一个节点");
+                Draw.setHint(Hint, "请选择一个节点");
                 return;
             }
-            if(CurNode.isRoot()){
-                Draw.setHint(Hint,"根节点无法添加兄弟节点！");
+            if (CurNode.isRoot()) {
+                Draw.setHint(Hint, "根节点无法添加兄弟节点！");
                 return;
             }
             TreeNode tmp = new TreeNode("子主题");
-            tmp.initNode(root,A1);
+            tmp.initNode(root, A1);
             if (CurNode.getparent().isRoot()) {
-                if(CurNode.getType()==-1){
+                if (CurNode.getType() == -1) {
                     TreeNode.getLchildren().add(tmp);
                     tmp.setType(-1);
-                }
-                else {
+                } else {
                     TreeNode.getRchildren().add(tmp);
                     tmp.setType(1);
                 }
@@ -120,16 +124,16 @@ public class Controller implements Initializable {
             }
             A1.getChildren().add(tmp);//添加节点
             A1.getChildren().add(tmp.getLine());//添加线
-            CurNode.getparent().getView().getChildren().add(tmp.getView());//添加试图
-            Draw.update(root,A1);
+            CurNode.getparent().getView().getChildren().add(tmp.getView());//添加视图
+            Draw.update(root, A1);
         });
         Del_Button.setOnAction(event -> {//删除节点按键
-            if(CurNode==null){
-                Draw.setHint(Hint,"请选择一个节点");
+            if (CurNode == null) {
+                Draw.setHint(Hint, "请选择一个节点");
                 return;
             }
-            if(CurNode.isRoot()){
-                Draw.setHint(Hint,"根节点无法被删除");
+            if (CurNode.isRoot()) {
+                Draw.setHint(Hint, "根节点无法被删除");
                 return;
             }
             Draw.DelNode(CurNode, A1);
@@ -145,24 +149,24 @@ public class Controller implements Initializable {
                 CurNode.getparent().getchildren().remove(CurNode);
                 CurNode.getparent().getView().getChildren().remove(CurNode.getView());
             }
-            Draw.update(root,A1);
-            CurNode=null;
+            Draw.update(root, A1);
+            CurNode = null;
         });
-        left_layout_button.setOnAction(event ->{
-            for(TreeNode tmp: TreeNode.getRchildren()){
+        left_layout_button.setOnAction(event -> {
+            for (TreeNode tmp : TreeNode.getRchildren()) {
                 TreeNode.getLchildren().add(tmp);
             }
             TreeNode.getRchildren().clear();
-            Draw.update(root,A1);
+            Draw.update(root, A1);
         });
-        right_layout_button.setOnAction(event ->{
-            for(TreeNode tmp: TreeNode.getLchildren()){
+        right_layout_button.setOnAction(event -> {
+            for (TreeNode tmp : TreeNode.getLchildren()) {
                 TreeNode.getRchildren().add(tmp);
             }
             TreeNode.getLchildren().clear();
-            Draw.update(root,A1);
+            Draw.update(root, A1);
         });
-        Automatic_layout_button.setOnAction(event ->{
+        Automatic_layout_button.setOnAction(event -> {
             /*
             while(TreeNode.getLchildren().size()>TreeNode.getRchildren().size()){
                 TreeNode.getRchildren().add(TreeNode.getLchildren().get(TreeNode.getLchildren().size()-1));
@@ -173,91 +177,76 @@ public class Controller implements Initializable {
                 TreeNode.getRchildren().remove(TreeNode.getRchildren().size()-1);
             }*/
             Draw.GetDp();
-            Draw.update(root,A1);
+            Draw.update(root, A1);
         });
-        Open_button.setOnAction(event ->{
-            Stage tmpstage=new Stage();
-            FileChooser fileChooser=new FileChooser();
+        Open_button.setOnAction(event -> {
+            Stage tmpstage = new Stage();
+            FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("打开");
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CCmind files","*.cmid"));
-            FileManger fm=new FileManger();
-            TreeNode tmp=null;
-            tmp= (TreeNode) fm.Open_File(fileChooser.showOpenDialog(tmpstage));
-            if(tmp!=null){
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CCmind files", "*.cmid"));
+            FileManger fm = new FileManger();
+            TreeNode tmp = null;
+            tmp = (TreeNode) fm.Open_File(fileChooser.showOpenDialog(tmpstage));
+            if (tmp != null) {
                 A1.getChildren().clear();
-                root=tmp;
-                root.initNode(root,A1);
+                root = tmp;
+                root.initNode(root, A1);
                 A1.getChildren().add(root);
                 treeview.setRoot(root.getView());
-                for(TreeNode tmp1:TreeNode.getRchildren()){
-                    reload(root,tmp1,A1);
+                for (TreeNode tmp1 : TreeNode.getRchildren()) {
+                    reload(root, tmp1, A1);
                 }
-                for(TreeNode tmp1:TreeNode.getLchildren()){
-                    reload(root,tmp1,A1);
+                for (TreeNode tmp1 : TreeNode.getLchildren()) {
+                    reload(root, tmp1, A1);
                 }
-                update(root,A1);
-                Draw.setHint(Hint,"文件打开成功");
-                CurNode=null;
-            }
-            else{
-                Draw.setHint(Hint,"文件打开失败，文件已经损坏");
+                update(root, A1);
+                Draw.setHint(Hint, "文件打开成功");
+                CurNode = null;
+            } else {
+                Draw.setHint(Hint, "文件打开失败，文件已经损坏");
             }
         });
-        Save_button.setOnAction(event->{
-            FileManger fm=new FileManger();
-            Stage tmpstage=new Stage();
-            FileChooser fileChooser=new FileChooser();
+        Save_button.setOnAction(event -> {
+            FileManger fm = new FileManger();
+            Stage tmpstage = new Stage();
+            FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("保存");
             fileChooser.setInitialFileName("test1");
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CCmind files","*.cmid"));
-            File file=fileChooser.showSaveDialog(tmpstage);
-            if(file==null)return;
-            try{
-                fm.Save_File(root,file);
-            }catch (Exception e){
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CCmind files", "*.cmid"));
+            File file = fileChooser.showSaveDialog(tmpstage);
+            if (file == null) return;
+            try {
+                fm.Save_File(root, file);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         });
-        New_button.setOnAction(event->{
+        New_button.setOnAction(event -> {
             TreeNode.getRchildren().clear();
             TreeNode.getLchildren().clear();
             A1.getChildren().clear();
-            root=new TreeNode("主题1");
-            root.initNode(root,A1);
+            root = new TreeNode("主题1");
+            root.initNode(root, A1);
             root.setIsroot(true);
             root.setLayoutX(500);
             root.setLayoutY(310);
             treeview.setRoot(root.getView());
             A1.getChildren().add(root);
-            CurNode=null;
+            CurNode = null;
         });
-        Export_button.setOnAction(event->{
-            FileChooser fileChooser=new FileChooser();
+        Export_button.setOnAction(event -> {
+            FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("导出");
             fileChooser.setInitialFileName("test1");
             fileChooser.getExtensionFilters().addAll(
-                    new FileChooser.ExtensionFilter("PNG","*.png"),
-                    new FileChooser.ExtensionFilter("JPG","*.jpg"));
-            File file=fileChooser.showSaveDialog(new Stage());
-            if(file!=null){
-                FileManger fm=new FileManger();
-                fm.export(A1,file);
-                Draw.setHint(Hint,"导出成功");
-            }
-        });
-
-        //为面板设立按钮的键盘触发事件
-        Scrollpane.setOnKeyPressed(event -> {
-            if(event.getCode() == KeyCode.ENTER && event.isShiftDown() && event.isControlDown()){
-                AddBro_Button.fire();
-            }else if (event.getCode() == KeyCode.ENTER && event.isControlDown()) {
-                AddSon_Button.fire();
-            }else if(event.getCode() == KeyCode.DELETE && event.isShiftDown() && event.isControlDown()){
-                Del_Button.fire();
-            }else if(event.getCode() == KeyCode.O && event.isControlDown()){
-                Open_button.fire();
+                new FileChooser.ExtensionFilter("PNG", "*.png"),
+                new FileChooser.ExtensionFilter("JPG", "*.jpg"));
+            File file = fileChooser.showSaveDialog(new Stage());
+            if (file != null) {
+                FileManger fm = new FileManger();
+                fm.export(A1, file);
+                Draw.setHint(Hint, "导出成功");
             }
         });
     }
-
 }
