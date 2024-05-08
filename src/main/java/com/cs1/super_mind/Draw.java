@@ -9,11 +9,8 @@ import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
 public abstract class Draw {
-//    public static final double RecH = 24;//固定矩阵高
     public static final double RecH = 48;//固定矩阵高
-//    public static final double RecW = 54;//固定矩阵长
     public static final double RecW = 108;//固定矩阵长
-//    public static final double Block_dis = 24;////固定块距
     public static final double length_dis = 200;
     public static final double Block_dis = 24;////固定块距
     public static TreeNode CurNode;

@@ -3,19 +3,25 @@ package com.cs1.super_mind;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXNodesList;
 import com.jfoenix.controls.JFXTreeView;
+import com.sun.source.tree.Tree;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import static com.cs1.super_mind.Draw.*;
@@ -57,6 +63,8 @@ public class Controller implements Initializable {
     private JFXNodesList Menubar;
     @FXML
     private Label Hint;
+    @FXML
+    private JFXButton Appearance_button;
 
 
     @Override
@@ -72,7 +80,7 @@ public class Controller implements Initializable {
         root.initNode(root, A1);
         treeview.setRoot(root.getView());
         Menubar.setSpacing(10);
-        //
+
         AddSon_Button.setOnAction(event -> {//添加节点按键
             if (CurNode == null) {
                 Draw.setHint(Hint, "请选择一个节点");
@@ -80,6 +88,7 @@ public class Controller implements Initializable {
             }
             TreeNode tmp = new TreeNode("子节点");
             tmp.initNode(root, A1);
+
             if (CurNode.isRoot()) {
                 if (TreeNode.getLchildren().size() < TreeNode.getRchildren().size()) {
                     TreeNode.getLchildren().add(tmp);
@@ -245,10 +254,66 @@ public class Controller implements Initializable {
                 Draw.setHint(Hint, "导出成功");
             }
         });
+        //添加外观按钮
+        Appearance_button.setOnAction(actionEvent -> {
+            HashMap<String, String> color = new HashMap<>();
+            color.put("Red", "#FF0000");
+            color.put("Yellow", "#F9AA33");
+            color.put("Bule", "#0000FF");
+            ComboBox<String> colorComboBox = new ComboBox<>();
+            colorComboBox.getItems().addAll("Red", "Yellow", "Blue");
+            colorComboBox.setPromptText("请选择按钮与节点颜色");
+
+            ComboBox<String> fontComboBox = new ComboBox<>();
+            fontComboBox.getItems().addAll("Arial", "Times New Roman", "Courier New");
+            fontComboBox.setPromptText("请选择字体大小");
+
+
+            Button button = new Button("确定");
+            button.setOnAction(actionEvent1 -> {
+                    String selectedFont = fontComboBox.getValue();
+                    TreeNode.font_type = selectedFont;
+
+                    String selcetedColor = colorComboBox.getValue();
+                    String colorHex = color.get(selcetedColor);
+                    TreeNode.backgroundColor = colorHex;
+                    String style = "-fx-background-color: " + colorHex + "; -fx-background-radius: 10px;";
+                    String style2 = "-fx-background-color:" + colorHex;
+                    //改变按钮颜色
+                    AddBro_Button.setStyle(style);
+                    AddSon_Button.setStyle(style);
+                    Del_Button.setStyle(style);
+                    File_button.setStyle(style);
+                    Appearance_button.setStyle(style);
+                    Save_button.setStyle(style2);
+                    Open_button.setStyle(style2);
+                    Export_button.setStyle(style2);
+                    New_button.setStyle(style2);
+                    //改变节点颜色
+                    root.setStyle(style2);
+                    for (TreeNode leftNode : root.getLchildren()) {
+                        dfs(leftNode, style);
+                    }
+                    for (TreeNode rightNode : root.getRchildren()) {
+                        dfs(rightNode, style);
+                    }
+
+                }
+            );
+            VBox vBox = new VBox(10);
+            vBox.getChildren().addAll(colorComboBox, fontComboBox, button);
+            Scene scene = new Scene(vBox, 200, 150);
+            Stage window = new Stage();
+            window.setScene(scene);
+            window.setTitle("外观设置");
+            window.show();
+        });
         //鼠标悬停打开按钮
+        /*
         File_button.setOnMouseEntered(event -> {
             File_button.fire();
-        });
+        })
+         */
         //面板获取焦点退出
         Scrollpane.setOnMouseClicked(event -> {
             if (Menubar.isExpanded()) {
@@ -267,15 +332,24 @@ public class Controller implements Initializable {
                 Open_button.fire();
             } else if (event.getCode() == KeyCode.S && event.isControlDown()) {
                 Save_button.fire();
-            } else if(event.getCode() == KeyCode.P && event.isControlDown()){
+            } else if (event.getCode() == KeyCode.P && event.isControlDown()) {
                 Export_button.fire();
-            }else if(event.getCode() == KeyCode.L &&event.isControlDown() && event.isShiftDown()){
+            } else if (event.getCode() == KeyCode.L && event.isControlDown() && event.isShiftDown()) {
                 left_layout_button.fire();
-            }else if(event.getCode() == KeyCode.R &&event.isControlDown() && event.isShiftDown()){
+            } else if (event.getCode() == KeyCode.R && event.isControlDown() && event.isShiftDown()) {
                 right_layout_button.fire();
-            }else if(event.getCode() == KeyCode.A &&event.isControlDown() && event.isShiftDown()){
+            } else if (event.getCode() == KeyCode.A && event.isControlDown() && event.isShiftDown()) {
                 Automatic_layout_button.fire();
             }
         });
+    }
+
+    //递归改变所有节点颜色
+    void dfs(TreeNode curNode, String style) {
+        curNode.setStyle(style);
+        for(TreeNode node : curNode.getchildren()){
+            node.setStyle(style);
+            dfs(curNode,style);
+        }
     }
 }

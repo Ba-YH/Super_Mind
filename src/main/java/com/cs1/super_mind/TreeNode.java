@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import static com.cs1.super_mind.Draw.*;
 
 public class TreeNode extends TextField implements Serializable {
+    public static String backgroundColor="#F9AA33";
     public static double LBlockLen=Draw.RecH;
     public static double RBlockLen=Draw.RecH;
     public static String font_type="微软雅黑";
@@ -105,10 +106,10 @@ public class TreeNode extends TextField implements Serializable {
         this.setOnMouseClicked(event ->{
             if(CurNode!=null) {
                 CurNode.setEditable(false);
-                CurNode.setStyle("-fx-control-inner-background:#F9AA33");
+                CurNode.setStyle("-fx-control-inner-background:"+backgroundColor);
             }
             CurNode = this;
-            CurNode.setStyle("-fx-control-inner-background:#F9AA33;"+"-fx-border-color: #FF1493;"+"-fx-border-radius: 2px;");
+            CurNode.setStyle("-fx-control-inner-background:"+backgroundColor+";"+"-fx-border-color: #FF1493;"+"-fx-border-radius: 2px;");
             if(event.getClickCount()==2){
                 super.setCursor(Cursor.TEXT);
                 super.setEditable(true);
@@ -129,19 +130,19 @@ public class TreeNode extends TextField implements Serializable {
         super.setAlignment(Pos.CENTER);
         super.setPrefHeight(Draw.RecH);
         super.setPrefWidth(this.TextLen);
-        super.setStyle("-fx-control-inner-background:#F9AA33");
+        super.setStyle("-fx-control-inner-background:"+backgroundColor);
         super.setText(this.txt);
         super.setEditable(false);
         super.setOnMouseEntered(event->{
             super.setCursor(Cursor.DEFAULT);
-            super.setStyle("-fx-control-inner-background:#F9AA33;"+"-fx-border-color:#00BFFF;"+"-fx-border-radius: 2px;");
+            super.setStyle("-fx-control-inner-background:"+backgroundColor+";"+"-fx-border-color:#00BFFF;"+"-fx-border-radius: 2px;");
         });
         super.setOnMouseExited(event->{
             if(CurNode!=this) {
-                this.setStyle("-fx-control-inner-background:#F9AA33;");
+                this.setStyle("-fx-control-inner-background:"+backgroundColor+";");
             }
             else {
-                this.setStyle("-fx-control-inner-background:#F9AA33;"+"-fx-border-color:#FF1493;"+"-fx-border-radius: 2px;");
+                this.setStyle("-fx-control-inner-background:"+backgroundColor+";"+"-fx-border-color:#FF1493;"+"-fx-border-radius: 2px;");
             }
         });
         view = new TreeViewItem(this.txt);
