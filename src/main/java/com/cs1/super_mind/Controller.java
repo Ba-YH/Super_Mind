@@ -248,5 +248,24 @@ public class Controller implements Initializable {
                 Draw.setHint(Hint, "导出成功");
             }
         });
+        //文件按钮设置
+        File_button.setOnMouseEntered(event -> {
+            File_button.fire();
+        });
+        File_button.setOnMouseExited(event -> {
+            File_button.fire();
+        });
+        //为面板设立按钮的键盘触发事件
+        Scrollpane.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ENTER && event.isShiftDown() && event.isControlDown()) {
+                AddBro_Button.fire();
+            } else if (event.getCode() == KeyCode.ENTER && event.isControlDown()) {
+                AddSon_Button.fire();
+            } else if (event.getCode() == KeyCode.DELETE && event.isShiftDown() && event.isControlDown()) {
+                Del_Button.fire();
+            } else if (event.getCode() == KeyCode.O && event.isControlDown()) {
+                Open_button.fire();
+            }
+        });
     }
 }
