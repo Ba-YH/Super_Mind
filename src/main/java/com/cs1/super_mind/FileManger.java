@@ -62,7 +62,7 @@ public class FileManger {
     public void export(AnchorPane A1,File file){
         WritableImage image=A1.snapshot(new SnapshotParameters(),null);
         try {
-            ImageIO.write(SwingFXUtils.fromFXImage(image,null),"png",file);
+            ImageIO.write(SwingFXUtils.fromFXImage(image,null),"jpg",file);
             System.out.println("保存成功");
         }catch (IOException ex){
             System.out.println("保存失败"+ex.getMessage());

@@ -167,15 +167,6 @@ public class Controller implements Initializable {
             Draw.update(root, A1);
         });
         Automatic_layout_button.setOnAction(event -> {
-            /*
-            while(TreeNode.getLchildren().size()>TreeNode.getRchildren().size()){
-                TreeNode.getRchildren().add(TreeNode.getLchildren().get(TreeNode.getLchildren().size()-1));
-                TreeNode.getLchildren().remove(TreeNode.getLchildren().size()-1);
-            }
-            while(TreeNode.getLchildren().size()<TreeNode.getRchildren().size()){
-                TreeNode.getLchildren().add(TreeNode.getRchildren().get(TreeNode.getRchildren().size()-1));
-                TreeNode.getRchildren().remove(TreeNode.getRchildren().size()-1);
-            }*/
             Draw.GetDp();
             Draw.update(root, A1);
         });
@@ -183,7 +174,7 @@ public class Controller implements Initializable {
             Stage tmpstage = new Stage();
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("打开");
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CCmind files", "*.cmid"));
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("super_mind files", "*.smind"));
             FileManger fm = new FileManger();
             TreeNode tmp = null;
             tmp = (TreeNode) fm.Open_File(fileChooser.showOpenDialog(tmpstage));
@@ -212,7 +203,7 @@ public class Controller implements Initializable {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("保存");
             fileChooser.setInitialFileName("test1");
-            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CCmind files", "*.cmid"));
+            fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("super_mind files", "*.smind"));
             File file = fileChooser.showSaveDialog(tmpstage);
             if (file == null) return;
             try {
@@ -239,21 +230,15 @@ public class Controller implements Initializable {
             fileChooser.setTitle("导出");
             fileChooser.setInitialFileName("test1");
             fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("PNG", "*.png"),
-                new FileChooser.ExtensionFilter("JPG", "*.jpg"));
+                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                new FileChooser.ExtensionFilter("PNG", "*.png")
+            );
             File file = fileChooser.showSaveDialog(new Stage());
             if (file != null) {
                 FileManger fm = new FileManger();
                 fm.export(A1, file);
                 Draw.setHint(Hint, "导出成功");
             }
-        });
-        //文件按钮设置
-        File_button.setOnMouseEntered(event -> {
-            File_button.fire();
-        });
-        File_button.setOnMouseExited(event -> {
-            File_button.fire();
         });
         //为面板设立按钮的键盘触发事件
         Scrollpane.setOnKeyPressed(event -> {
