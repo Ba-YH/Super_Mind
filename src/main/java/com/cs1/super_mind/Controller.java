@@ -11,9 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
@@ -342,14 +340,51 @@ public class Controller implements Initializable {
                 Automatic_layout_button.fire();
             }
         });
+        //添加ctrl+wheel 事件实现缩放
+        Scrollpane.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
+            if (event.isControlDown()) {
+                Scrollpane.addEventHandler(ScrollEvent.SCROLL, scrollEvent -> {
+                    if (scrollEvent.getDeltaY() > 0) {
+                        if (Draw.RecH > 10) {
+                            Draw.RecH*=0.9;
+                            Draw.RecW*=0.9;
+                            Draw.Block_dis=Draw.RecH/2;
+                            Draw.length_dis*=0.9;
+                            refresh(root);
+                        }
+                    } else {
+                        if (Draw.RecH < 100) {
+                            Draw.RecH*=1.1;
+                            Draw.RecW*=1.1;
+                            Draw.Block_dis=Draw.RecH/2;
+                            Draw.length_dis*=1.1;
+                            refresh(root);
+                        }
+                    }
+                });
+            }
+        });
     }
 
     //递归改变所有节点颜色
     void dfs(TreeNode curNode, String style) {
         curNode.setStyle(style);
-        for(TreeNode node : curNode.getchildren()){
+        for (TreeNode node : curNode.getchildren()) {
             node.setStyle(style);
-            dfs(curNode,style);
+            dfs(curNode, style);
+        }
+    }
+
+    //调整大小后，不改变位置的刷新页面
+    void refresh(TreeNode root) {
+        A1.getChildren().clear();
+        root.initNode(root, A1);
+        A1.getChildren().add(root);
+        for (TreeNode node : TreeNode.getLchildren()) {
+            reload(root, node, A1);
+        }
+        for (TreeNode node : TreeNode.getRchildren()) {
+            reload(root, node, A1);
         }
     }
 }
