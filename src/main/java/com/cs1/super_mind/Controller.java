@@ -6,6 +6,7 @@ import com.jfoenix.controls.JFXTreeView;
 import com.sun.source.tree.Tree;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -289,11 +290,8 @@ public class Controller implements Initializable {
                     New_button.setStyle(style2);
                     //改变节点颜色
                     root.setStyle(style2);
-                    for (TreeNode leftNode : root.getLchildren()) {
-                        dfs(leftNode, style);
-                    }
-                    for (TreeNode rightNode : root.getRchildren()) {
-                        dfs(rightNode, style);
+                    for(Node node : A1.getChildren()){
+                        node.setStyle(style2);
                     }
 
                 }
@@ -366,14 +364,6 @@ public class Controller implements Initializable {
         });
     }
 
-    //递归改变所有节点颜色
-    void dfs(TreeNode curNode, String style) {
-        curNode.setStyle(style);
-        for (TreeNode node : curNode.getchildren()) {
-            node.setStyle(style);
-            dfs(curNode, style);
-        }
-    }
 
     //调整大小后，不改变位置的刷新页面
     void refresh(TreeNode root) {
