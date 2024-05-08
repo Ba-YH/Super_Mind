@@ -9,8 +9,12 @@ import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
 public abstract class Draw {
-    public static final double RecH = 24;//固定矩阵高
-    public static final double RecW = 54;//固定矩阵长
+//    public static final double RecH = 24;//固定矩阵高
+    public static final double RecH = 48;//固定矩阵高
+//    public static final double RecW = 54;//固定矩阵长
+    public static final double RecW = 108;//固定矩阵长
+//    public static final double Block_dis = 24;////固定块距
+    public static final double length_dis = 200;
     public static final double Block_dis = 24;////固定块距
     public static TreeNode CurNode;
 
@@ -28,7 +32,7 @@ public abstract class Draw {
                 tmp.setType(-1); // 设置节点类型为向左
                 update_len(tmp); // 递归更新左子节点的块大小
                 // 计算左子树的最长子链长度，包括节点本身的文本长度以及节点之间的距离
-                TreeNode.LMaxLinkLen = Math.max(TreeNode.LMaxLinkLen, tmp.getMaxLinkLen() + (100 - Draw.RecW) + tmp.getTextLen());
+                TreeNode.LMaxLinkLen = Math.max(TreeNode.LMaxLinkLen, tmp.getMaxLinkLen() + (length_dis - Draw.RecW) + tmp.getTextLen());
                 len += tmp.getBlockLen(); // 累加左子树的块长度
             }
             len += (TreeNode.getLchildren().size() - 1) * Block_dis; // 考虑节点之间的距离
@@ -40,7 +44,7 @@ public abstract class Draw {
                 tmp.setType(1); // 设置节点类型为向右
                 update_len(tmp); // 递归更新右子节点的块大小
                 // 计算右子树的最长子链长度，包括节点本身的文本长度以及节点之间的距离
-                TreeNode.RMaxLinkLen = Math.max(TreeNode.RMaxLinkLen, tmp.getMaxLinkLen() + (100 - Draw.RecW) + tmp.getTextLen());
+                TreeNode.RMaxLinkLen = Math.max(TreeNode.RMaxLinkLen, tmp.getMaxLinkLen() + (length_dis - Draw.RecW) + tmp.getTextLen());
                 len += tmp.getBlockLen(); // 累加右子树的块长度
             }
             len += (TreeNode.getRchildren().size() - 1) * Block_dis; // 考虑节点之间的距离
@@ -52,7 +56,7 @@ public abstract class Draw {
                 tmp.setType(a.getType()); // 设置子节点的类型与当前节点相同
                 update_len(tmp); // 递归更新子节点的块大小
                 // 更新节点的最长子链长度为子节点的最长子链长度与节点之间的距离及节点本身文本长度的较大值
-                a.setMaxLinkLen(max(a.getMaxLinkLen(), tmp.getMaxLinkLen() + (100 - Draw.RecW) + tmp.getTextLen()));
+                a.setMaxLinkLen(max(a.getMaxLinkLen(), tmp.getMaxLinkLen() + (length_dis - Draw.RecW) + tmp.getTextLen()));
                 len += tmp.getBlockLen(); // 累加子节点的块长度
             }
             len += (a.getchildren().size() - 1) * Block_dis; // 考虑子节点之间的距离
@@ -126,12 +130,12 @@ public abstract class Draw {
         // 根据节点类型设置节点的X轴位置和连线的起点终点坐标
         if (tmp.getType() == 1) { // 右边节点
             // 设置节点的X轴位置为父节点的X轴位置加上父节点文本长度再加上固定值
-            tmp.setLayoutX(a.getLayoutX() + a.getTextLen() - Draw.RecW + 100 * tmp.getType());
+            tmp.setLayoutX(a.getLayoutX() + a.getTextLen() - Draw.RecW + length_dis * tmp.getType());
             // 绘制连线，起点为父节点的右侧，终点为当前节点的左侧
             tmp.getLine().SetLine(a.getLayoutX() + a.getTextLen(), a.getLayoutY() + Draw.RecH / 2, tmp.getLayoutX(), tmp.getLayoutY() + Draw.RecH / 2);
         } else { // 左边节点
             // 设置节点的X轴位置为父节点的X轴位置减去固定值再减去当前节点文本长度
-            tmp.setLayoutX(a.getLayoutX() + (100 - Draw.RecW) * tmp.getType() - tmp.getTextLen());
+            tmp.setLayoutX(a.getLayoutX() + (length_dis - Draw.RecW) * tmp.getType() - tmp.getTextLen());
             // 绘制连线，起点为父节点的左侧，终点为当前节点的右侧
             tmp.getLine().SetLine(a.getLayoutX(), a.getLayoutY() + Draw.RecH / 2, tmp.getLayoutX() + tmp.getTextLen(), tmp.getLayoutY() + Draw.RecH / 2);
         }

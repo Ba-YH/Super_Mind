@@ -5,6 +5,9 @@ import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import static com.cs1.super_mind.Draw.*;
@@ -12,6 +15,7 @@ import static com.cs1.super_mind.Draw.*;
 public class TreeNode extends TextField implements Serializable {
     public static double LBlockLen=Draw.RecH;
     public static double RBlockLen=Draw.RecH;
+    public static String font_type="微软雅黑";
     public static double LMaxLinkLen;
     public static double RMaxLinkLen;
     private static ArrayList<TreeNode> Lchildren=new ArrayList<>();//根节点的左子树
@@ -44,7 +48,6 @@ public class TreeNode extends TextField implements Serializable {
     private String txt;
 
     TreeNode(String txt1) {
-        super(txt1);
         setTxt(txt1);
         BlockLen = Draw.RecH;
         super.setPrefHeight(Draw.RecH);
@@ -53,6 +56,7 @@ public class TreeNode extends TextField implements Serializable {
         type = 1;
         children = new ArrayList<>();
         line = new Line();
+        this.setFont(new Font(font_type,20));
     }
     public String getTxt() {
         return txt;
@@ -115,7 +119,8 @@ public class TreeNode extends TextField implements Serializable {
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 txt=TreeNode.super.getText();
                 view.setValue(txt);
-                TreeNode.super.setPrefWidth(Math.max(TreeNode.super.getText().length()*13,50));
+                //更新节点的宽度
+                TreeNode.super.setPrefWidth(Math.max(TreeNode.super.getText().length()*24, RecW));
                 TextLen=TreeNode.super.getPrefWidth();
                 update(root,A1);
             }
