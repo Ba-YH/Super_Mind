@@ -265,10 +265,17 @@ public class Controller implements Initializable {
 
             ComboBox<String> fontComboBox = new ComboBox<>();
             fontComboBox.getItems().addAll("Arial", "Times New Roman", "Courier New");
-            fontComboBox.setPromptText("请选择字体大小");
+            fontComboBox.setPromptText("请选择字体");
 
 
             Button button = new Button("确定");
+            VBox vBox = new VBox(10);
+            vBox.getChildren().addAll(colorComboBox, fontComboBox, button);
+            Scene scene = new Scene(vBox, 200, 150);
+            Stage window = new Stage();
+            window.setScene(scene);
+            window.setTitle("外观设置");
+            window.show();
             button.setOnAction(actionEvent1 -> {
                     String selectedFont = fontComboBox.getValue();
                     TreeNode.font_type = selectedFont;
@@ -293,16 +300,11 @@ public class Controller implements Initializable {
                     for (Node node : A1.getChildren()) {
                         node.setStyle(style2);
                     }
-
+                    //确定自动关闭窗口
+                    window.close();
                 }
             );
-            VBox vBox = new VBox(10);
-            vBox.getChildren().addAll(colorComboBox, fontComboBox, button);
-            Scene scene = new Scene(vBox, 200, 150);
-            Stage window = new Stage();
-            window.setScene(scene);
-            window.setTitle("外观设置");
-            window.show();
+
         });
         //鼠标悬停打开按钮
         /*

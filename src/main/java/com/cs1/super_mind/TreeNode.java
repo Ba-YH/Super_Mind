@@ -109,7 +109,7 @@ public class TreeNode extends TextField implements Serializable {
                 CurNode.setStyle("-fx-control-inner-background:"+backgroundColor);
             }
             CurNode = this;
-            CurNode.setStyle("-fx-control-inner-background:"+backgroundColor+";"+"-fx-border-color: #FF1493;"+"-fx-border-radius: 2px;");
+            CurNode.setStyle("-fx-control-inner-background:"+backgroundColor+";"+"-fx-border-color: #FF1493;"+"-fx-border-radius: 10px;");
             if(event.getClickCount()==2){
                 super.setCursor(Cursor.TEXT);
                 super.setEditable(true);
