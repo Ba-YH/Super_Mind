@@ -44,6 +44,8 @@ public class Controller implements Initializable {
     @FXML
     private JFXButton File_button;
     @FXML
+    private JFXButton panebutton;
+    @FXML
     private JFXButton Save_button;
     @FXML
     private JFXButton Open_button;
@@ -61,7 +63,7 @@ public class Controller implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         //初始化根节点
-        root = new TreeNode("主题1");
+        root = new TreeNode("根节点");
         Scrollpane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);//滚动条
         root.setIsroot(true);
         root.setLayoutX(500);
@@ -76,7 +78,7 @@ public class Controller implements Initializable {
                 Draw.setHint(Hint, "请选择一个节点");
                 return;
             }
-            TreeNode tmp = new TreeNode("子主题");
+            TreeNode tmp = new TreeNode("子节点");
             tmp.initNode(root, A1);
             if (CurNode.isRoot()) {
                 if (TreeNode.getLchildren().size() < TreeNode.getRchildren().size()) {
@@ -106,7 +108,7 @@ public class Controller implements Initializable {
                 Draw.setHint(Hint, "根节点无法添加兄弟节点！");
                 return;
             }
-            TreeNode tmp = new TreeNode("子主题");
+            TreeNode tmp = new TreeNode("子节点");
             tmp.initNode(root, A1);
             if (CurNode.getparent().isRoot()) {
                 if (CurNode.getType() == -1) {
@@ -171,6 +173,7 @@ public class Controller implements Initializable {
             Draw.update(root, A1);
         });
         Open_button.setOnAction(event -> {
+
             Stage tmpstage = new Stage();
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("打开");
@@ -213,10 +216,12 @@ public class Controller implements Initializable {
             }
         });
         New_button.setOnAction(event -> {
+            //新建前保存
+            Save_button.fire();
             TreeNode.getRchildren().clear();
             TreeNode.getLchildren().clear();
             A1.getChildren().clear();
-            root = new TreeNode("主题1");
+            root = new TreeNode("根节点");
             root.initNode(root, A1);
             root.setIsroot(true);
             root.setLayoutX(500);
@@ -240,6 +245,16 @@ public class Controller implements Initializable {
                 Draw.setHint(Hint, "导出成功");
             }
         });
+        //鼠标悬停打开按钮
+        File_button.setOnMouseEntered(event -> {
+            File_button.fire();
+        });
+        //面板获取焦点退出
+        Scrollpane.setOnMouseClicked(event -> {
+            if (Menubar.isExpanded()) {
+                File_button.fire();
+            }
+        });
         //为面板设立按钮的键盘触发事件
         Scrollpane.setOnKeyPressed(event -> {
             if (event.getCode() == KeyCode.ENTER && event.isShiftDown() && event.isControlDown()) {
@@ -250,8 +265,16 @@ public class Controller implements Initializable {
                 Del_Button.fire();
             } else if (event.getCode() == KeyCode.O && event.isControlDown()) {
                 Open_button.fire();
-            } else if(event.getCode() == KeyCode.S && event.isControlDown()) {
+            } else if (event.getCode() == KeyCode.S && event.isControlDown()) {
                 Save_button.fire();
+            } else if(event.getCode() == KeyCode.P && event.isControlDown()){
+                Export_button.fire();
+            }else if(event.getCode() == KeyCode.L &&event.isControlDown() && event.isShiftDown()){
+                left_layout_button.fire();
+            }else if(event.getCode() == KeyCode.R &&event.isControlDown() && event.isShiftDown()){
+                right_layout_button.fire();
+            }else if(event.getCode() == KeyCode.A &&event.isControlDown() && event.isShiftDown()){
+                Automatic_layout_button.fire();
             }
         });
     }
