@@ -290,7 +290,7 @@ public class Controller implements Initializable {
                     New_button.setStyle(style2);
                     //改变节点颜色
                     root.setStyle(style2);
-                    for(Node node : A1.getChildren()){
+                    for (Node node : A1.getChildren()) {
                         node.setStyle(style2);
                     }
 
@@ -318,24 +318,25 @@ public class Controller implements Initializable {
         });
         //为面板设立按钮的键盘触发事件
         Scrollpane.setOnKeyPressed(event -> {
+            //按键多的先检测，不然会被覆盖掉
             if (event.getCode() == KeyCode.ENTER && event.isShiftDown() && event.isControlDown()) {
                 AddBro_Button.fire();
-            } else if (event.getCode() == KeyCode.ENTER && event.isControlDown()) {
-                AddSon_Button.fire();
             } else if (event.getCode() == KeyCode.DELETE && event.isShiftDown() && event.isControlDown()) {
                 Del_Button.fire();
-            } else if (event.getCode() == KeyCode.O && event.isControlDown()) {
-                Open_button.fire();
-            } else if (event.getCode() == KeyCode.S && event.isControlDown()) {
-                Save_button.fire();
-            } else if (event.getCode() == KeyCode.P && event.isControlDown()) {
-                Export_button.fire();
             } else if (event.getCode() == KeyCode.L && event.isControlDown() && event.isShiftDown()) {
                 left_layout_button.fire();
             } else if (event.getCode() == KeyCode.R && event.isControlDown() && event.isShiftDown()) {
                 right_layout_button.fire();
             } else if (event.getCode() == KeyCode.A && event.isControlDown() && event.isShiftDown()) {
                 Automatic_layout_button.fire();
+            } else if (event.getCode() == KeyCode.ENTER && event.isControlDown()) {
+                AddSon_Button.fire();
+            } else if (event.getCode() == KeyCode.O && event.isControlDown()) {
+                Open_button.fire();
+            } else if (event.getCode() == KeyCode.S && event.isControlDown()) {
+                Save_button.fire();
+            } else if (event.getCode() == KeyCode.P && event.isControlDown()) {
+                Export_button.fire();
             }
         });
         //添加ctrl+wheel 事件实现缩放
@@ -344,18 +345,18 @@ public class Controller implements Initializable {
                 Scrollpane.addEventHandler(ScrollEvent.SCROLL, scrollEvent -> {
                     if (scrollEvent.getDeltaY() > 0) {
                         if (Draw.RecH > 10) {
-                            Draw.RecH*=0.9;
-                            Draw.RecW*=0.9;
-                            Draw.Block_dis=Draw.RecH/2;
-                            Draw.length_dis*=0.9;
+                            Draw.RecH *= 0.9;
+                            Draw.RecW *= 0.9;
+                            Draw.Block_dis = Draw.RecH / 2;
+                            Draw.length_dis *= 0.9;
                             refresh(root);
                         }
                     } else {
                         if (Draw.RecH < 100) {
-                            Draw.RecH*=1.1;
-                            Draw.RecW*=1.1;
-                            Draw.Block_dis=Draw.RecH/2;
-                            Draw.length_dis*=1.1;
+                            Draw.RecH *= 1.1;
+                            Draw.RecW *= 1.1;
+                            Draw.Block_dis = Draw.RecH / 2;
+                            Draw.length_dis *= 1.1;
                             refresh(root);
                         }
                     }
