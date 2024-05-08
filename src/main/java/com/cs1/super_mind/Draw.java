@@ -194,6 +194,7 @@ public abstract class Draw {
     public static void GetDp() {
         int sum = 0;
         int idx = 0;
+        //获取节点的所有孩子个数
         ArrayList<TreeNode> tmplist = new ArrayList<>();
         for (TreeNode tmp : TreeNode.getLchildren()) {
             DFS(tmp);
@@ -205,6 +206,8 @@ public abstract class Draw {
             sum += tmp.getSonSize();
             tmplist.add(tmp);
         }
+        //dp[i][j]=1/0 表示前i个节点的孩子个数中选择若干个是1否0达到j
+        //pre[i][j]=1/0 表示前i个节点的孩子个数中选择若干个达到j是1否0需要i的参与
         int[][] dp = new int[tmplist.size() + 1][sum + 1];
         int[][] pre = new int[tmplist.size() + 1][sum + 1];
         dp[0][0] = 1;
@@ -219,6 +222,7 @@ public abstract class Draw {
                 }
             }
         }
+        //得到最小的二分集差值
         int p = 0;
         int minn = 99999999;
         boolean[] st = new boolean[tmplist.size() + 1];
@@ -228,12 +232,14 @@ public abstract class Draw {
                 p = i;
             }
         }
+        //根据pre数组，标记出其中一个集合选择的若干节点
         for (int i = tmplist.size(); i >= 1; i--) {
             if (pre[i][p] != 0) {
                 st[pre[i][p]] = true;
                 p -= tmplist.get(pre[i][p] - 1).getSonSize();
             }
         }
+        //将两个集合分散到根节点左右两边表示
         TreeNode.getLchildren().clear();
         TreeNode.getRchildren().clear();
         for (int i = 1; i <= tmplist.size(); i++) {
