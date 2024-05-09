@@ -12,7 +12,8 @@
 
 <AnchorPane fx:id="Pane1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" style="-fx-background-color: #000000;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cs1.super_mind.Controller">
    <children>
-      <JFXTreeView fx:id="treeview" layoutY="86.0" prefHeight="693.0" prefWidth="230.0" style="-fx-background-color: #FEDBD0;" />
+      <JFXTreeView fx:id="treeview" layoutY="86.0" prefHeight="693.0" prefWidth="230.0" style="-fx-background-color: #FEDBD0;-fx-font-size: 16px" >
+      </JFXTreeView>
       <ScrollPane fx:id="Scrollpane" layoutX="232.0" layoutY="86.0" prefHeight="693.0" prefWidth="1047.0" style="-fx-background-color: #ffffff;">
          <content>
           <AnchorPane fx:id="A1" minHeight="0.0" minWidth="0.0" prefHeight="693.0" prefWidth="1045.0" style="-fx-background-color: #FFFFFF;" />
