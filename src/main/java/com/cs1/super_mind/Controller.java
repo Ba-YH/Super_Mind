@@ -14,6 +14,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -301,6 +302,7 @@ public class Controller implements Initializable {
             gridPane.getChildren().addAll(label1, colorPicker, label2, fontComboBox, button);
             Scene scene = new Scene(gridPane, 400, 200);
             Stage window = new Stage();
+            window.getIcons().add(new Image("img/main.png"));
             window.setScene(scene);
             window.setTitle("外观设置");
             window.show();

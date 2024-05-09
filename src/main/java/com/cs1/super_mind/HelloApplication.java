@@ -1,16 +1,14 @@
 package com.cs1.super_mind;
 
-import com.sun.javafx.scene.traversal.Algorithm;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.input.KeyCode;
-import javafx.stage.FileChooser;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.io.IOException;
 
 public class HelloApplication extends Application {
@@ -21,6 +19,8 @@ public class HelloApplication extends Application {
         //控制器类中使用stage
         Controller controller = fxmlLoader.getController();
         controller.setStage(stage);
+        Image icon =new Image("img/main.png");
+        stage.getIcons().add(icon);
         stage.setTitle("无标题.smind");
         stage.setScene(scene);
         stage.show();
