@@ -344,6 +344,7 @@ public class Controller implements Initializable {
             }
             //选中节点失去焦点
             if (CurNode != null) {
+                CurNode.setEditable(false);
                 CurNode.setStyle(
                     "-fx-background-color:"+backgroundColor+";" +
                         "-fx-background-radius:"+Integer.toString(radius)

@@ -145,8 +145,14 @@ public class TreeNode extends TextField implements Serializable {
         this.setOnKeyPressed(event -> {
             //检测是否按下ctrl 避免冲突
             if (CurNode != null && event.getCode() == KeyCode.ENTER && !event.isControlDown()) {
-                super.setCursor(Cursor.TEXT);
-                super.setEditable(true);
+                //回车可编辑，再次回车编辑完成
+                if (!super.isEditable()) {
+                    super.setCursor(Cursor.TEXT);
+                    super.setEditable(true);
+                } else {
+                    super.setEditable(false);
+                    super.setStyle(defaultStyle.get());
+                }
             }
         });
         super.textProperty().addListener(new ChangeListener<String>() {
