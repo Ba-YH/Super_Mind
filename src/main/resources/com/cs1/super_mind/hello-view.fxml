@@ -125,7 +125,7 @@
             </ImageView>
          </graphic>
       </JFXButton>
-      <Label fx:id="Hint" layoutX="6.0" layoutY="779.0" prefHeight="19.0" prefWidth="836.0" text="Label" textFill="WHITE">
+      <Label fx:id="Hint" layoutX="6.0" layoutY="779.0" prefHeight="19.0" prefWidth="836.0" text="" textFill="WHITE">
          <font>
             <Font size="14.0" />
          </font>

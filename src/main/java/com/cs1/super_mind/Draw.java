@@ -2,6 +2,7 @@ package com.cs1.super_mind;
 
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -189,6 +190,8 @@ public abstract class Draw {
 
     public static void setHint(Label hint, String txt) {
         hint.setText(txt);
+        //设置字体颜色
+        hint.setTextFill(Color.RED);
     }
 
     public static void GetDp() {
