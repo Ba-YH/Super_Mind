@@ -3,9 +3,11 @@ package com.cs1.super_mind;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXNodesList;
 import com.jfoenix.controls.JFXTreeView;
+import com.sun.javafx.iio.gif.GIFDescriptor;
 import com.sun.source.tree.Tree;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -14,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -255,23 +258,38 @@ public class Controller implements Initializable {
         });
         //添加外观按钮
         Appearance_button.setOnAction(actionEvent -> {
+            //网格布局
+            GridPane gridPane = new GridPane();
+            gridPane.setPadding(new Insets(10, 10, 10, 10));
+            gridPane.setVgap(8);
+            gridPane.setHgap(10);
+
+            Label label1 = new Label("请选择节点颜色：");
+            GridPane.setConstraints(label1, 0, 0);
+
             HashMap<String, String> color = new HashMap<>();
             color.put("Red", "#FF0000");
             color.put("Yellow", "#F9AA33");
             color.put("Bule", "#0000FF");
             ComboBox<String> colorComboBox = new ComboBox<>();
             colorComboBox.getItems().addAll("Red", "Yellow", "Blue");
-            colorComboBox.setPromptText("请选择按钮与节点颜色");
+            colorComboBox.setPromptText("Yellow");
+            GridPane.setConstraints(colorComboBox,1,0);
+
+            Label label2=new Label("请选择字体");
+            GridPane.setConstraints(label2,0,1);
 
             ComboBox<String> fontComboBox = new ComboBox<>();
-            fontComboBox.getItems().addAll("Arial", "Times New Roman", "Courier New");
-            fontComboBox.setPromptText("请选择字体");
+            fontComboBox.getItems().addAll("微软雅黑","Arial", "Times New Roman", "Courier New");
+            fontComboBox.setPromptText("微软雅黑");
+            GridPane.setConstraints(fontComboBox, 1, 1);
 
 
             Button button = new Button("确定");
-            VBox vBox = new VBox(10);
-            vBox.getChildren().addAll(colorComboBox, fontComboBox, button);
-            Scene scene = new Scene(vBox, 200, 150);
+            GridPane.setConstraints(button, 0, 2,2,1);
+
+            gridPane.getChildren().addAll(label1, colorComboBox, label2, fontComboBox, button);
+            Scene scene = new Scene(gridPane, 300, 150);
             Stage window = new Stage();
             window.setScene(scene);
             window.setTitle("外观设置");
