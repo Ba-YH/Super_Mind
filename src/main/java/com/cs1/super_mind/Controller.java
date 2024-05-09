@@ -32,7 +32,7 @@ import static com.cs1.super_mind.TreeNode.*;
 public class Controller implements Initializable {
     @FXML
     private AnchorPane A1;//添加节点的地方
-    private static TreeNode root;
+    static TreeNode root;
     @FXML
     private JFXTreeView treeview;
 
@@ -68,6 +68,7 @@ public class Controller implements Initializable {
     private JFXButton Appearance_button;
     public static double orgSceneX = 500, orgSceneY = 310;
     public static double orgTranslateX, orgTranslateY;
+    private Stage stage;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -196,6 +197,7 @@ public class Controller implements Initializable {
             fileChooser.setInitialFileName("test1");
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("super_mind files", "*.smind"));
             File file = fileChooser.showSaveDialog(tmpstage);
+            stage.setTitle(file.getName());
             if (file == null) return;
             try {
                 fm.Save_File(root, file);
@@ -440,6 +442,10 @@ public class Controller implements Initializable {
         }
         Draw.update(root, A1);
         CurNode = null;
+    }
+
+    public void setStage(Stage stage) {
+        this.stage=stage;
     }
 
     /*
