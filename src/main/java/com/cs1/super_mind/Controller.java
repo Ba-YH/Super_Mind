@@ -5,6 +5,8 @@ import com.jfoenix.controls.JFXNodesList;
 import com.jfoenix.controls.JFXTreeView;
 import com.sun.javafx.iio.gif.GIFDescriptor;
 import com.sun.source.tree.Tree;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -18,6 +20,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javax.swing.text.Position;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
@@ -63,7 +66,8 @@ public class Controller implements Initializable {
     private Label Hint;
     @FXML
     private JFXButton Appearance_button;
-
+    double orgSceneX = 500, orgSceneY = 310;
+    double orgTranslateX, orgTranslateY;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -72,8 +76,8 @@ public class Controller implements Initializable {
         root = new TreeNode("根节点");
         Scrollpane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);//滚动条
         root.setIsroot(true);
-        root.setLayoutX(500);
-        root.setLayoutY(310);
+        root.setLayoutX(orgSceneX);
+        root.setLayoutY(orgSceneY);
         A1.getChildren().add(root);
         root.initNode(root, A1);
         treeview.setRoot(root.getView());
@@ -180,7 +184,6 @@ public class Controller implements Initializable {
             Draw.update(root, A1);
         });
         Open_button.setOnAction(event -> {
-
             Stage tmpstage = new Stage();
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("打开");
@@ -262,7 +265,6 @@ public class Controller implements Initializable {
             gridPane.setPadding(new Insets(10));
 
 
-
             Label label1 = new Label("请选择节点颜色：");
             GridPane.setConstraints(label1, 0, 0);
             /*下拉框选择颜色
@@ -306,7 +308,7 @@ public class Controller implements Initializable {
                     Color color = colorPicker.getValue();
                     String colorHex = toHex(color);
                     backgroundColor = colorHex;
-                    borderColor=toHex(getComplementaryColor(color));
+                    borderColor = toHex(getComplementaryColor(color));
                     String style = "-fx-background-color: " + colorHex + "; -fx-background-radius: 10px;";
                     String style2 = "-fx-background-color:" + colorHex;
                     //改变按钮颜色
@@ -346,10 +348,10 @@ public class Controller implements Initializable {
             if (CurNode != null) {
                 CurNode.setEditable(false);
                 CurNode.setStyle(
-                    "-fx-background-color:"+backgroundColor+";" +
-                        "-fx-background-radius:"+Integer.toString(radius)
+                    "-fx-background-color:" + backgroundColor + ";" +
+                        "-fx-background-radius:" + Integer.toString(radius)
                 );
-                CurNode=null;
+                CurNode = null;
             }
         });
         //为面板设立按钮的键盘触发事件
@@ -401,6 +403,9 @@ public class Controller implements Initializable {
                 });
             }
         });
+        //尝试实现根节点的拖拽功能
+        root.setOnMousePressed(this::onMousePressed);
+        root.setOnMouseDragged(this::onMouseDragged);
     }
 
     //color转换Hex编码
@@ -431,5 +436,23 @@ public class Controller implements Initializable {
             reload(root, node, A1);
         }
         Draw.update(root, A1);
+    }
+
+    private void onMousePressed(MouseEvent event) {
+        orgSceneX = event.getSceneX();
+        orgSceneY = event.getSceneY();
+        orgTranslateX = ((Button) (event.getSource())).getTranslateX();
+        orgTranslateY = ((Button) (event.getSource())).getTranslateY();
+    }
+
+    private void onMouseDragged(MouseEvent event) {
+        double offsetX = event.getSceneX() - orgSceneX;
+        double offsetY = event.getSceneY() - orgSceneY;
+        double newTranslateX = orgTranslateX + offsetX;
+        double newTranslateY = orgTranslateY + offsetY;
+
+        ((TextField) (event.getSource())).setTranslateX(newTranslateX);
+        ((TextField) (event.getSource())).setTranslateY(newTranslateY);
+        refresh(root);
     }
 }
