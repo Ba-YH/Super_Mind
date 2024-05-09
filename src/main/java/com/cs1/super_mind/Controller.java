@@ -53,7 +53,7 @@ public class Controller implements Initializable {
     @FXML
     private JFXButton File_button;
     @FXML
-    private JFXButton Save_button;
+    JFXButton Save_button;
     @FXML
     private JFXButton Open_button;
     @FXML
