@@ -1,32 +1,41 @@
 package com.cs1.super_mind;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicReference;
+
 import static com.cs1.super_mind.Draw.*;
 
 public class TreeNode extends TextField implements Serializable {
-    public static String backgroundColor="#F9AA33";
-    public static double LBlockLen=Draw.RecH;
-    public static double RBlockLen=Draw.RecH;
-    public static String font_type="微软雅黑";
+    public static String backgroundColor = "#F9AA33";
+    public static String borderColor = "#FF1493";
+    public static int radius = 8;
+    public static double LBlockLen = Draw.RecH;
+    public static double RBlockLen = Draw.RecH;
+    public static String font_type = "微软雅黑";
+
     public static double LMaxLinkLen;
     public static double RMaxLinkLen;
-    private static ArrayList<TreeNode> Lchildren=new ArrayList<>();//根节点的左子树
-    private static ArrayList<TreeNode> Rchildren=new ArrayList<>();//根节点的右子树子树
+    private static ArrayList<TreeNode> Lchildren = new ArrayList<>();//根节点的左子树
+    private static ArrayList<TreeNode> Rchildren = new ArrayList<>();//根节点的右子树子树
+
     public static ArrayList<TreeNode> getLchildren() {
         return Lchildren;
     }
+
     public static ArrayList<TreeNode> getRchildren() {
         return Rchildren;
     }
+
     public static void setLchildren(ArrayList<TreeNode> lchildren) {
         Lchildren = lchildren;
     }
@@ -57,11 +66,13 @@ public class TreeNode extends TextField implements Serializable {
         type = 1;
         children = new ArrayList<>();
         line = new Line();
-        this.setFont(new Font(font_type,20));
+        this.setFont(new Font(font_type, 20));
     }
+
     public String getTxt() {
         return txt;
     }
+
     public void setTxt(String txt) {
         this.txt = txt;
     }
@@ -69,12 +80,15 @@ public class TreeNode extends TextField implements Serializable {
     public TreeViewItem getView() {
         return view;
     }
+
     public TreeNode getparent() {
         return parent;
     }
+
     public double getMaxLinkLen() {
         return MaxLinkLen;
     }
+
     public double getTextLen() {
         return TextLen;
     }
@@ -102,15 +116,35 @@ public class TreeNode extends TextField implements Serializable {
     public ArrayList<TreeNode> getchildren() {
         return children;
     }
-    public void initNode(TreeNode root,AnchorPane A1) {
-        this.setOnMouseClicked(event ->{
-            if(CurNode!=null) {
+
+    public void initNode(TreeNode root, AnchorPane A1) {
+        //默认节点样式
+        AtomicReference<String> defaultStyle = new AtomicReference<>("-fx-background-color:" + backgroundColor
+            + ";-fx-background-radius:" + Integer.toString(radius) + ";");//必须带分号，后面还要添加
+        this.setOnMouseClicked(event -> {
+            defaultStyle.set("-fx-background-color:" + backgroundColor
+                + ";-fx-background-radius:" + Integer.toString(radius) + ";");
+            //边框样式
+            String borderStyle = "-fx-control-inner-background:" + backgroundColor +
+                ";-fx-border-color:" + borderColor + ";-fx-border-radius:" + Integer.toString(radius);
+
+            if (CurNode != null) {
+                //上一个选中节点回到默认样式
                 CurNode.setEditable(false);
-                CurNode.setStyle("-fx-control-inner-background:"+backgroundColor);
+                CurNode.setStyle(defaultStyle.get());
             }
+            //选中就给当前节点加上边框样式
             CurNode = this;
-            CurNode.setStyle("-fx-control-inner-background:"+backgroundColor+";"+"-fx-border-color: #FF1493;"+"-fx-border-radius: 10px;");
-            if(event.getClickCount()==2){
+            CurNode.setStyle(defaultStyle + borderStyle);
+            if (event.getClickCount() == 2) {
+                super.setCursor(Cursor.TEXT);
+                super.setEditable(true);
+            }
+        });
+        //选中节点 + enter实现编辑
+        this.setOnKeyPressed(event -> {
+            //检测是否按下ctrl 避免冲突
+            if (CurNode != null && event.getCode() == KeyCode.ENTER && !event.isControlDown()) {
                 super.setCursor(Cursor.TEXT);
                 super.setEditable(true);
             }
@@ -118,39 +152,30 @@ public class TreeNode extends TextField implements Serializable {
         super.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                txt=TreeNode.super.getText();
+                txt = TreeNode.super.getText();
                 view.setValue(txt);
                 //更新节点的宽度
-                TreeNode.super.setPrefWidth(Math.max(TreeNode.super.getText().length()*24, RecW));
-                TextLen=TreeNode.super.getPrefWidth();
-                update(root,A1);
+                TreeNode.super.setPrefWidth(Math.max(TreeNode.super.getText().length() * 24, RecW));
+                TextLen = TreeNode.super.getPrefWidth();
+                update(root, A1);
             }
         });
         //设置节点的背景颜色
         super.setAlignment(Pos.CENTER);
-        super.setPrefHeight(Draw.RecH);
+        super.setPrefHeight(RecH);
         super.setPrefWidth(this.TextLen);
-        super.setStyle("-fx-control-inner-background:"+backgroundColor);
+        super.setStyle(defaultStyle.get());
         super.setText(this.txt);
         super.setEditable(false);
-        super.setOnMouseEntered(event->{
-            super.setCursor(Cursor.DEFAULT);
-            super.setStyle("-fx-control-inner-background:"+backgroundColor+";"+"-fx-border-color:#00BFFF;"+"-fx-border-radius: 2px;");
-        });
-        super.setOnMouseExited(event->{
-            if(CurNode!=this) {
-                this.setStyle("-fx-control-inner-background:"+backgroundColor+";");
-            }
-            else {
-                this.setStyle("-fx-control-inner-background:"+backgroundColor+";"+"-fx-border-color:#FF1493;"+"-fx-border-radius: 2px;");
-            }
-        });
+        //删除鼠标悬停事件，节点只有点击事件
         view = new TreeViewItem(this.txt);
         view.setExpanded(true);
     }
+
     public Line getLine() {
         return line;
     }
+
     public int getType() {
 
         return type;
@@ -159,9 +184,11 @@ public class TreeNode extends TextField implements Serializable {
     public void setType(int type) {
         this.type = type;
     }
+
     public double getBlockLen() {
         return BlockLen;
     }
+
     public void setBlockLen(double blockLen) {
         BlockLen = blockLen;
     }

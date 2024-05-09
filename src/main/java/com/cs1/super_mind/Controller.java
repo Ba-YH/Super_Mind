@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.ResourceBundle;
 
 import static com.cs1.super_mind.Draw.*;
+import static com.cs1.super_mind.TreeNode.*;
 
 public class Controller implements Initializable {
     @FXML
@@ -276,7 +277,7 @@ public class Controller implements Initializable {
             GridPane.setConstraints(colorComboBox,1,0);
              */
             ColorPicker colorPicker = new ColorPicker();
-            colorPicker.setValue(Color.valueOf(TreeNode.backgroundColor));
+            colorPicker.setValue(Color.valueOf(backgroundColor));
             GridPane.setConstraints(colorPicker, 1, 0);
 
             Label label2 = new Label("请选择字体");
@@ -304,7 +305,8 @@ public class Controller implements Initializable {
 
                     Color color = colorPicker.getValue();
                     String colorHex = toHex(color);
-                    TreeNode.backgroundColor = colorHex;
+                    backgroundColor = colorHex;
+                    borderColor=toHex(getComplementaryColor(color));
                     String style = "-fx-background-color: " + colorHex + "; -fx-background-radius: 10px;";
                     String style2 = "-fx-background-color:" + colorHex;
                     //改变按钮颜色
@@ -334,10 +336,19 @@ public class Controller implements Initializable {
             File_button.fire();
         })
          */
-        //面板获取焦点退出
+        //面板获取焦点
         Scrollpane.setOnMouseClicked(event -> {
+            //收起文件菜单
             if (Menubar.isExpanded()) {
                 File_button.fire();
+            }
+            //选中节点失去焦点
+            if (CurNode != null) {
+                CurNode.setStyle(
+                    "-fx-background-color:"+backgroundColor+";" +
+                        "-fx-background-radius:"+Integer.toString(radius)
+                );
+                CurNode=null;
             }
         });
         //为面板设立按钮的键盘触发事件
@@ -397,6 +408,14 @@ public class Controller implements Initializable {
             (int) (color.getRed() * 255),
             (int) (color.getGreen() * 255),
             (int) (color.getBlue() * 255));
+    }
+
+    //获取互补色，边框颜色为节点颜色的互补色
+    public static Color getComplementaryColor(Color color) {
+        double red = 255 - color.getRed();
+        double green = 255 - color.getGreen();
+        double blue = 255 - color.getBlue();
+        return Color.rgb((int) red, (int) green, (int) blue);
     }
 
     //调整大小后，不改变位置的刷新页面
