@@ -123,14 +123,14 @@ public class TreeNode extends TextField implements Serializable {
         //默认节点样式，使用原子类安全的更新全局共享状态
         AtomicReference<String> defaultStyle = new AtomicReference<>("-fx-background-color:" + backgroundColor
             + ";-fx-background-radius:" + Integer.toString(radius) + ";");//必须带分号，后面还要添加
+
         this.setOnMouseClicked(event -> {
             defaultStyle.set("-fx-background-color:" + backgroundColor
                 + ";-fx-background-radius:" + Integer.toString(radius) + ";");
-            //边框样式
             String borderStyle = "-fx-control-inner-background:" + backgroundColor +
                 ";-fx-border-color:" + borderColor + ";-fx-border-radius:" + Integer.toString(radius);
 
-            if (CurNode != null) {
+            if (CurNode != null && !event.isControlDown()) {
                 //上一个选中节点回到默认样式
                 CurNode.setEditable(false);
                 CurNode.setStyle(defaultStyle.get());
@@ -155,6 +155,18 @@ public class TreeNode extends TextField implements Serializable {
                     super.setEditable(false);
                     super.setStyle(defaultStyle.get());
                 }
+            }
+        });
+
+        //添加多选事件
+        this.setOnKeyPressed(event -> {
+            String borderStyle = "-fx-control-inner-background:" + backgroundColor +
+                ";-fx-border-color:" + borderColor + ";-fx-border-radius:" + Integer.toString(radius);
+            if (event.isControlDown()) {
+                this.setOnMouseClicked(event2 -> {
+                    CurNodes.add(this);
+                    this.setStyle(defaultStyle +borderStyle);
+                });
             }
         });
         super.textProperty().addListener(new ChangeListener<String>() {
