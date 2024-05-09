@@ -8,6 +8,7 @@ import com.sun.source.tree.Tree;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -254,9 +255,12 @@ public class Controller implements Initializable {
         Appearance_button.setOnAction(actionEvent -> {
             //网格布局
             GridPane gridPane = new GridPane();
-            gridPane.setPadding(new Insets(10, 10, 10, 10));
-            gridPane.setVgap(8);
+            gridPane.setAlignment(Pos.CENTER);
+            gridPane.setVgap(10);
             gridPane.setHgap(10);
+            gridPane.setPadding(new Insets(10));
+
+
 
             Label label1 = new Label("请选择节点颜色：");
             GridPane.setConstraints(label1, 0, 0);
@@ -273,22 +277,23 @@ public class Controller implements Initializable {
              */
             ColorPicker colorPicker = new ColorPicker();
             colorPicker.setValue(Color.valueOf(TreeNode.backgroundColor));
-            GridPane.setConstraints(colorPicker,1,0);
+            GridPane.setConstraints(colorPicker, 1, 0);
 
-            Label label2=new Label("请选择字体");
-            GridPane.setConstraints(label2,0,1);
+            Label label2 = new Label("请选择字体");
+            GridPane.setConstraints(label2, 0, 1);
 
             ComboBox<String> fontComboBox = new ComboBox<>();
-            fontComboBox.getItems().addAll("微软雅黑","Arial", "Times New Roman", "Courier New");
+            fontComboBox.getItems().addAll("微软雅黑", "Arial", "Times New Roman", "Courier New");
             fontComboBox.setValue("微软雅黑");
             GridPane.setConstraints(fontComboBox, 1, 1);
 
 
             Button button = new Button("确定");
-            GridPane.setConstraints(button, 0, 2,2,1);
+            button.setMaxWidth(Double.MAX_VALUE);
+            GridPane.setConstraints(button, 0, 2, 2, 1);
 
             gridPane.getChildren().addAll(label1, colorPicker, label2, fontComboBox, button);
-            Scene scene = new Scene(gridPane, 300, 150);
+            Scene scene = new Scene(gridPane, 400, 200);
             Stage window = new Stage();
             window.setScene(scene);
             window.setTitle("外观设置");
@@ -364,20 +369,20 @@ public class Controller implements Initializable {
                 Scrollpane.addEventHandler(ScrollEvent.SCROLL, scrollEvent -> {
                     //向下滚动缩小
                     //tips:纵向块距不改变
-                    double zoomAmplitude=0.01; //缩放幅度
-                    double scaleRatio=3;       //块大小与间距的缩放比例，块大小缩放要更快
+                    double zoomAmplitude = 0.01; //缩放幅度
+                    double scaleRatio = 3;       //块大小与间距的缩放比例，块大小缩放要更快
                     if (scrollEvent.getDeltaY() < 0) {
                         if (Draw.RecH > 10) {
-                            Draw.RecH *= (1-scaleRatio*zoomAmplitude);
-                            Draw.RecW =Draw.RecH*2.25;
-                            Draw.length_dis=Draw.RecW*2*(1-zoomAmplitude);
+                            Draw.RecH *= (1 - scaleRatio * zoomAmplitude);
+                            Draw.RecW = Draw.RecH * 2.25;
+                            Draw.length_dis = Draw.RecW * 2 * (1 - zoomAmplitude);
                             refresh(root);
                         }
                     } else {
                         if (Draw.RecH < 100) {
-                            Draw.RecH *= (1+scaleRatio*zoomAmplitude);
-                            Draw.RecW =Draw.RecH*2.25;
-                            Draw.length_dis = Draw.RecW*2*(1+zoomAmplitude);
+                            Draw.RecH *= (1 + scaleRatio * zoomAmplitude);
+                            Draw.RecW = Draw.RecH * 2.25;
+                            Draw.length_dis = Draw.RecW * 2 * (1 + zoomAmplitude);
                             refresh(root);
                         }
                     }
@@ -389,10 +394,11 @@ public class Controller implements Initializable {
     //color转换Hex编码
     public static String toHex(Color color) {
         return String.format("#%02X%02X%02X",
-                (int) (color.getRed() * 255),
-                (int) (color.getGreen() * 255),
-                (int) (color.getBlue() * 255));
+            (int) (color.getRed() * 255),
+            (int) (color.getGreen() * 255),
+            (int) (color.getBlue() * 255));
     }
+
     //调整大小后，不改变位置的刷新页面
     void refresh(TreeNode root) {
         A1.getChildren().clear();
