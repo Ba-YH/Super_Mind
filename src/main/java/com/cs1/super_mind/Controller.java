@@ -10,14 +10,10 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.input.*;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
@@ -51,8 +47,6 @@ public class Controller implements Initializable {
     private ScrollPane Scrollpane;
     @FXML
     private JFXButton File_button;
-    @FXML
-    private JFXButton panebutton;
     @FXML
     private JFXButton Save_button;
     @FXML
@@ -266,29 +260,34 @@ public class Controller implements Initializable {
 
             Label label1 = new Label("请选择节点颜色：");
             GridPane.setConstraints(label1, 0, 0);
-
+            /*下拉框选择颜色
             HashMap<String, String> color = new HashMap<>();
             color.put("Red", "#FF0000");
             color.put("Yellow", "#F9AA33");
             color.put("Bule", "#0000FF");
+            GridPane.setConstraints(colorPicker,0,2,2,2);
             ComboBox<String> colorComboBox = new ComboBox<>();
             colorComboBox.getItems().addAll("Red", "Yellow", "Blue");
-            colorComboBox.setPromptText("Yellow");
+            colorComboBox.setValue("Yellow");
             GridPane.setConstraints(colorComboBox,1,0);
+             */
+            ColorPicker colorPicker = new ColorPicker();
+            colorPicker.setValue(Color.valueOf(TreeNode.backgroundColor));
+            GridPane.setConstraints(colorPicker,1,0);
 
             Label label2=new Label("请选择字体");
             GridPane.setConstraints(label2,0,1);
 
             ComboBox<String> fontComboBox = new ComboBox<>();
             fontComboBox.getItems().addAll("微软雅黑","Arial", "Times New Roman", "Courier New");
-            fontComboBox.setPromptText("微软雅黑");
+            fontComboBox.setValue("微软雅黑");
             GridPane.setConstraints(fontComboBox, 1, 1);
 
 
             Button button = new Button("确定");
             GridPane.setConstraints(button, 0, 2,2,1);
 
-            gridPane.getChildren().addAll(label1, colorComboBox, label2, fontComboBox, button);
+            gridPane.getChildren().addAll(label1, colorPicker, label2, fontComboBox, button);
             Scene scene = new Scene(gridPane, 300, 150);
             Stage window = new Stage();
             window.setScene(scene);
@@ -298,8 +297,8 @@ public class Controller implements Initializable {
                     String selectedFont = fontComboBox.getValue();
                     TreeNode.font_type = selectedFont;
 
-                    String selcetedColor = colorComboBox.getValue();
-                    String colorHex = color.get(selcetedColor);
+                    Color color = colorPicker.getValue();
+                    String colorHex = toHex(color);
                     TreeNode.backgroundColor = colorHex;
                     String style = "-fx-background-color: " + colorHex + "; -fx-background-radius: 10px;";
                     String style2 = "-fx-background-color:" + colorHex;
@@ -385,7 +384,13 @@ public class Controller implements Initializable {
         });
     }
 
-
+    //color转换Hex编码
+    public static String toHex(Color color) {
+        return String.format("#%02X%02X%02X",
+                (int) (color.getRed() * 255),
+                (int) (color.getGreen() * 255),
+                (int) (color.getBlue() * 255));
+    }
     //调整大小后，不改变位置的刷新页面
     void refresh(TreeNode root) {
         A1.getChildren().clear();
