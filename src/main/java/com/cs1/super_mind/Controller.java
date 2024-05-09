@@ -364,18 +364,20 @@ public class Controller implements Initializable {
                 Scrollpane.addEventHandler(ScrollEvent.SCROLL, scrollEvent -> {
                     //向下滚动缩小
                     //tips:纵向块距不改变
+                    double zoomAmplitude=0.01; //缩放幅度
+                    double scaleRatio=3;       //块大小与间距的缩放比例，块大小缩放要更快
                     if (scrollEvent.getDeltaY() < 0) {
                         if (Draw.RecH > 10) {
-                            Draw.RecH *= 0.98;
+                            Draw.RecH *= (1-scaleRatio*zoomAmplitude);
                             Draw.RecW =Draw.RecH*2.25;
-                            Draw.length_dis=Draw.RecW*2*0.98;
+                            Draw.length_dis=Draw.RecW*2*(1-zoomAmplitude);
                             refresh(root);
                         }
                     } else {
                         if (Draw.RecH < 100) {
-                            Draw.RecH *= 1.02;
+                            Draw.RecH *= (1+scaleRatio*zoomAmplitude);
                             Draw.RecW =Draw.RecH*2.25;
-                            Draw.length_dis = Draw.RecW*2*1.02;
+                            Draw.length_dis = Draw.RecW*2*(1+zoomAmplitude);
                             refresh(root);
                         }
                     }
