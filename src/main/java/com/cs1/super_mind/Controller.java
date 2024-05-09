@@ -362,20 +362,20 @@ public class Controller implements Initializable {
         Scrollpane.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (event.isControlDown()) {
                 Scrollpane.addEventHandler(ScrollEvent.SCROLL, scrollEvent -> {
-                    if (scrollEvent.getDeltaY() > 0) {
+                    //向下滚动缩小
+                    //tips:纵向块距不改变
+                    if (scrollEvent.getDeltaY() < 0) {
                         if (Draw.RecH > 10) {
-                            Draw.RecH *= 0.9;
-                            Draw.RecW *= 0.9;
-                            Draw.Block_dis = Draw.RecH / 2;
-                            Draw.length_dis *= 0.9;
+                            Draw.RecH *= 0.98;
+                            Draw.RecW =Draw.RecH*2.25;
+                            Draw.length_dis=Draw.RecW*2*0.98;
                             refresh(root);
                         }
                     } else {
                         if (Draw.RecH < 100) {
-                            Draw.RecH *= 1.1;
-                            Draw.RecW *= 1.1;
-                            Draw.Block_dis = Draw.RecH / 2;
-                            Draw.length_dis *= 1.1;
+                            Draw.RecH *= 1.02;
+                            Draw.RecW =Draw.RecH*2.25;
+                            Draw.length_dis = Draw.RecW*2*1.02;
                             refresh(root);
                         }
                     }
@@ -402,5 +402,6 @@ public class Controller implements Initializable {
         for (TreeNode node : TreeNode.getRchildren()) {
             reload(root, node, A1);
         }
+        Draw.update(root, A1);
     }
 }

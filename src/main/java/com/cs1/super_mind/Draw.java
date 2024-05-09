@@ -9,10 +9,10 @@ import static java.lang.Math.abs;
 import static java.lang.Math.max;
 
 public abstract class Draw {
-    public static  double RecH = 48;//固定矩阵高
-    public static  double RecW = 108;//固定矩阵长
-    public static  double length_dis = 200;
-    public static  double Block_dis = 24;//固定块距
+    public static  double RecH = 48;//节点高
+    public static  double RecW = 108;//节点宽
+    public static  double length_dis = 200; //横向间距
+    public static  final double Block_dis = 24;//纵向间距固定
     public static TreeNode CurNode;
 
     /**
