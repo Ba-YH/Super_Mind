@@ -66,8 +66,8 @@ public class Controller implements Initializable {
     private Label Hint;
     @FXML
     private JFXButton Appearance_button;
-    double orgSceneX = 500, orgSceneY = 310;
-    double orgTranslateX, orgTranslateY;
+    public static double orgSceneX = 500, orgSceneY = 310;
+    public static double orgTranslateX, orgTranslateY;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -141,29 +141,7 @@ public class Controller implements Initializable {
             Draw.update(root, A1);
         });
         Del_Button.setOnAction(event -> {//删除节点按键
-            if (CurNode == null) {
-                Draw.setHint(Hint, "请选择一个节点");
-                return;
-            }
-            if (CurNode.isRoot()) {
-                Draw.setHint(Hint, "根节点无法被删除");
-                return;
-            }
-            Draw.DelNode(CurNode, A1);
-            if (CurNode.getparent().isRoot()) {
-                if (TreeNode.getLchildren().contains(CurNode)) {
-                    TreeNode.getLchildren().remove(CurNode);
-                    root.getView().getChildren().remove(CurNode.getView());
-                } else {
-                    TreeNode.getRchildren().remove(CurNode);
-                    root.getView().getChildren().remove(CurNode.getView());
-                }
-            } else {
-                CurNode.getparent().getchildren().remove(CurNode);
-                CurNode.getparent().getView().getChildren().remove(CurNode.getView());
-            }
-            Draw.update(root, A1);
-            CurNode = null;
+            DelNode();
         });
         left_layout_button.setOnAction(event -> {
             for (TreeNode tmp : TreeNode.getRchildren()) {
@@ -404,8 +382,8 @@ public class Controller implements Initializable {
             }
         });
         //尝试实现根节点的拖拽功能
-        root.setOnMousePressed(this::onMousePressed);
-        root.setOnMouseDragged(this::onMouseDragged);
+        //root.setOnMousePressed(this::onMousePressed);
+        //root.setOnMouseDragged(this::onMouseDragged);
     }
 
     //color转换Hex编码
@@ -437,7 +415,34 @@ public class Controller implements Initializable {
         }
         Draw.update(root, A1);
     }
+    //多选删除的准备
+    void DelNode() {
+        if (CurNode == null) {
+            Draw.setHint(Hint, "请选择一个节点");
+            return;
+        }
+        if (CurNode.isRoot()) {
+            Draw.setHint(Hint, "根节点无法被删除");
+            return;
+        }
+        Draw.DelNode(CurNode, A1);
+        if (CurNode.getparent().isRoot()) {
+            if (TreeNode.getLchildren().contains(CurNode)) {
+                TreeNode.getLchildren().remove(CurNode);
+                root.getView().getChildren().remove(CurNode.getView());
+            } else {
+                TreeNode.getRchildren().remove(CurNode);
+                root.getView().getChildren().remove(CurNode.getView());
+            }
+        } else {
+            CurNode.getparent().getchildren().remove(CurNode);
+            CurNode.getparent().getView().getChildren().remove(CurNode.getView());
+        }
+        Draw.update(root, A1);
+        CurNode = null;
+    }
 
+    /*
     private void onMousePressed(MouseEvent event) {
         orgSceneX = event.getSceneX();
         orgSceneY = event.getSceneY();
@@ -455,4 +460,5 @@ public class Controller implements Initializable {
         ((TextField) (event.getSource())).setTranslateY(newTranslateY);
         refresh(root);
     }
+    */
 }

@@ -1,5 +1,6 @@
 package com.cs1.super_mind;
 
+import com.sun.source.tree.Tree;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Pos;
@@ -9,7 +10,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -164,7 +165,6 @@ public class TreeNode extends TextField implements Serializable {
                 ";-fx-border-color:" + borderColor + ";-fx-border-radius:" + Integer.toString(radius);
             if (event.isControlDown()) {
                 this.setOnMouseClicked(event2 -> {
-                    CurNodes.add(this);
                     this.setStyle(defaultStyle +borderStyle);
                 });
             }
@@ -219,5 +219,22 @@ public class TreeNode extends TextField implements Serializable {
 
     public void setSonSize(int sonSize) {
         SonSize = sonSize;
+    }
+
+
+   @SuppressWarnings("unchecked")
+    public static  TreeNode deepCopy(TreeNode object) throws Exception {
+        // 使用序列化进行深拷贝
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        ObjectOutputStream out = new ObjectOutputStream(bos);
+        out.writeObject(object);
+        out.flush();
+        out.close();
+
+        ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
+        ObjectInputStream in = new ObjectInputStream(bis);
+        TreeNode copied = (TreeNode) in.readObject();
+        in.close();
+        return  copied;
     }
 }
