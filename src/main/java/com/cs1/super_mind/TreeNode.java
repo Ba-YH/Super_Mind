@@ -16,7 +16,9 @@ import java.util.concurrent.atomic.AtomicReference;
 import static com.cs1.super_mind.Draw.*;
 
 public class TreeNode extends TextField implements Serializable {
+    //节点背景颜色，全局静态常量
     public static String backgroundColor = "#F9AA33";
+    //边框颜色，全局静态常量
     public static String borderColor = "#FF1493";
     public static int radius = 8;
     public static double LBlockLen = Draw.RecH;
@@ -44,7 +46,7 @@ public class TreeNode extends TextField implements Serializable {
         Rchildren = rchildren;
     }
 
-    //
+
     private double BlockLen;//块长度
     private int SonSize;
     private double TextLen;//文本宽度
@@ -118,7 +120,7 @@ public class TreeNode extends TextField implements Serializable {
     }
 
     public void initNode(TreeNode root, AnchorPane A1) {
-        //默认节点样式
+        //默认节点样式，使用原子类安全的更新全局共享状态
         AtomicReference<String> defaultStyle = new AtomicReference<>("-fx-background-color:" + backgroundColor
             + ";-fx-background-radius:" + Integer.toString(radius) + ";");//必须带分号，后面还要添加
         this.setOnMouseClicked(event -> {
