@@ -142,7 +142,29 @@ public class Controller implements Initializable {
             Draw.update(root, A1);
         });
         Del_Button.setOnAction(event -> {//删除节点按键
-            DelNode();
+            if (CurNode == null) {
+                Draw.setHint(Hint, "请选择一个节点");
+                return;
+            }
+            if (CurNode.isRoot()) {
+                Draw.setHint(Hint, "根节点无法被删除");
+                return;
+            }
+            Draw.DelNode(CurNode, A1);
+            if (CurNode.getparent().isRoot()) {
+                if (TreeNode.getLchildren().contains(CurNode)) {
+                    TreeNode.getLchildren().remove(CurNode);
+                    root.getView().getChildren().remove(CurNode.getView());
+                } else {
+                    TreeNode.getRchildren().remove(CurNode);
+                    root.getView().getChildren().remove(CurNode.getView());
+                }
+            } else {
+                CurNode.getparent().getchildren().remove(CurNode);
+                CurNode.getparent().getView().getChildren().remove(CurNode.getView());
+            }
+            Draw.update(root, A1);
+            CurNode = null;
         });
         left_layout_button.setOnAction(event -> {
             for (TreeNode tmp : TreeNode.getRchildren()) {
@@ -202,7 +224,8 @@ public class Controller implements Initializable {
             try {
                 fm.Save_File(root, file);
             } catch (Exception e) {
-                e.printStackTrace();
+                //不使用printStackTrace
+                Draw.setHint(Hint, "文件保存失败");
             }
         });
         New_button.setOnAction(event -> {
@@ -364,7 +387,7 @@ public class Controller implements Initializable {
                     //向下滚动缩小
                     //tips:纵向块距不改变
                     double zoomAmplitude = 0.01; //缩放幅度
-                    double scaleRatio = 3;       //块大小与间距的缩放比例，块大小缩放要更快
+                    double scaleRatio = 3;       //块与间距的缩放比例，块大小缩放要更快
                     if (scrollEvent.getDeltaY() < 0) {
                         if (Draw.RecH > 10) {
                             Draw.RecH *= (1 - scaleRatio * zoomAmplitude);
@@ -417,35 +440,9 @@ public class Controller implements Initializable {
         }
         Draw.update(root, A1);
     }
-    //多选删除的准备
-    void DelNode() {
-        if (CurNode == null) {
-            Draw.setHint(Hint, "请选择一个节点");
-            return;
-        }
-        if (CurNode.isRoot()) {
-            Draw.setHint(Hint, "根节点无法被删除");
-            return;
-        }
-        Draw.DelNode(CurNode, A1);
-        if (CurNode.getparent().isRoot()) {
-            if (TreeNode.getLchildren().contains(CurNode)) {
-                TreeNode.getLchildren().remove(CurNode);
-                root.getView().getChildren().remove(CurNode.getView());
-            } else {
-                TreeNode.getRchildren().remove(CurNode);
-                root.getView().getChildren().remove(CurNode.getView());
-            }
-        } else {
-            CurNode.getparent().getchildren().remove(CurNode);
-            CurNode.getparent().getView().getChildren().remove(CurNode.getView());
-        }
-        Draw.update(root, A1);
-        CurNode = null;
-    }
 
     public void setStage(Stage stage) {
-        this.stage=stage;
+        this.stage = stage;
     }
 
     /*

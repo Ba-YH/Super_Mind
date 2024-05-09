@@ -131,7 +131,7 @@ public class TreeNode extends TextField implements Serializable {
             String borderStyle = "-fx-control-inner-background:" + backgroundColor +
                 ";-fx-border-color:" + borderColor + ";-fx-border-radius:" + Integer.toString(radius);
 
-            if (CurNode != null && !event.isControlDown()) {
+            if (CurNode != null) {
                 //上一个选中节点回到默认样式
                 CurNode.setEditable(false);
                 CurNode.setStyle(defaultStyle.get());
@@ -159,16 +159,6 @@ public class TreeNode extends TextField implements Serializable {
             }
         });
 
-        //添加多选事件
-        this.setOnKeyPressed(event -> {
-            String borderStyle = "-fx-control-inner-background:" + backgroundColor +
-                ";-fx-border-color:" + borderColor + ";-fx-border-radius:" + Integer.toString(radius);
-            if (event.isControlDown()) {
-                this.setOnMouseClicked(event2 -> {
-                    this.setStyle(defaultStyle +borderStyle);
-                });
-            }
-        });
         super.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
@@ -221,20 +211,4 @@ public class TreeNode extends TextField implements Serializable {
         SonSize = sonSize;
     }
 
-
-   @SuppressWarnings("unchecked")
-    public static  TreeNode deepCopy(TreeNode object) throws Exception {
-        // 使用序列化进行深拷贝
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        ObjectOutputStream out = new ObjectOutputStream(bos);
-        out.writeObject(object);
-        out.flush();
-        out.close();
-
-        ByteArrayInputStream bis = new ByteArrayInputStream(bos.toByteArray());
-        ObjectInputStream in = new ObjectInputStream(bis);
-        TreeNode copied = (TreeNode) in.readObject();
-        in.close();
-        return  copied;
-    }
 }

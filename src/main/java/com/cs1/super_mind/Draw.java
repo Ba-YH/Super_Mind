@@ -15,8 +15,6 @@ public abstract class Draw {
     public static  double length_dis = 200; //横向间距
     public static  final double Block_dis = 24;//纵向间距固定
     public static TreeNode CurNode;
-    public static List<TreeNode> CurNodes;
-
     /**
      * 更新整棵树的所有节点的块上下大小
      *
