@@ -323,7 +323,7 @@ public class Controller implements Initializable {
                     Color color = colorPicker.getValue();
                     String colorHex = toHex(color);
                     backgroundColor = colorHex;
-                    borderColor = toHex(getComplementaryColor(color));
+                    //borderColor = toHex(getComplementaryColor(color));
                     String style = "-fx-background-color: " + colorHex + "; -fx-background-radius: 10px;";
                     String style2 = "-fx-background-color:" + colorHex;
                     //改变按钮颜色
