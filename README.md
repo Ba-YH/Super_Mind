@@ -1,11 +1,10 @@
-# CCMind
+# Super_Mind
 
 #### 介绍
 JAVA课程设计
 
-基于Liberica JDK18.0.1
-使用JAVAFX开发
+基于JavaFx的思维导图绘制工具
 
-自动调整功能采用01背包思路，动态规划求解。
-
-![输入图片说明](https://foruda.gitee.com/images/1667305738739439510/00245615_10823616.jpeg "微信图片_20221101202705.jpg")
+#### 本地运行
+1. 将`java/resources/`目录设置为资源根目录
+2. 使用SceneBuilder工具打开xml文件，要导入JFoenix库
