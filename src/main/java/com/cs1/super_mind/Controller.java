@@ -22,6 +22,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import javax.swing.text.Position;
+import javax.swing.text.View;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
@@ -70,6 +71,7 @@ public class Controller implements Initializable {
     public static double orgSceneX = 500, orgSceneY = 310;
     public static double orgTranslateX, orgTranslateY;
     private Stage stage;
+    private int number;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -87,18 +89,18 @@ public class Controller implements Initializable {
 
         AddSon_Button.setOnAction(event -> {//添加节点按键
             if (CurNode == null) {
-                Draw.setHint(Hint, "请选择一个节点");
+                setHint(Hint, "请选择一个节点");
                 return;
             }
             TreeNode tmp = new TreeNode("子节点");
             tmp.initNode(root, A1);
 
             if (CurNode.isRoot()) {
-                if (TreeNode.getLchildren().size() < TreeNode.getRchildren().size()) {
-                    TreeNode.getLchildren().add(tmp);
+                if (getLchildren().size() < getRchildren().size()) {
+                    getLchildren().add(tmp);
                     tmp.setType(-1);
                 } else {
-                    TreeNode.getRchildren().add(tmp);
+                    getRchildren().add(tmp);
                     tmp.setType(1);
                 }
                 tmp.setParent(CurNode);
@@ -109,26 +111,27 @@ public class Controller implements Initializable {
             }
             A1.getChildren().add(tmp);//添加节点
             A1.getChildren().add(tmp.getLine());//添加线
+            tmp.getView().setId(++number);
             CurNode.getView().getChildren().add(tmp.getView());//添加视图
-            Draw.update(root, A1);
+            update(root, A1);
         });
         AddBro_Button.setOnAction(event -> {
             if (CurNode == null) {
-                Draw.setHint(Hint, "请选择一个节点");
+                setHint(Hint, "请选择一个节点");
                 return;
             }
             if (CurNode.isRoot()) {
-                Draw.setHint(Hint, "根节点无法添加兄弟节点！");
+                setHint(Hint, "根节点无法添加兄弟节点！");
                 return;
             }
             TreeNode tmp = new TreeNode("子节点");
             tmp.initNode(root, A1);
             if (CurNode.getparent().isRoot()) {
                 if (CurNode.getType() == -1) {
-                    TreeNode.getLchildren().add(tmp);
+                    getLchildren().add(tmp);
                     tmp.setType(-1);
                 } else {
-                    TreeNode.getRchildren().add(tmp);
+                    getRchildren().add(tmp);
                     tmp.setType(1);
                 }
                 tmp.setParent(CurNode.getparent());
@@ -139,51 +142,52 @@ public class Controller implements Initializable {
             }
             A1.getChildren().add(tmp);//添加节点
             A1.getChildren().add(tmp.getLine());//添加线
+            tmp.getView().setId(++number);
             CurNode.getparent().getView().getChildren().add(tmp.getView());//添加视图
-            Draw.update(root, A1);
+            update(root, A1);
         });
         Del_Button.setOnAction(event -> {//删除节点按键
             if (CurNode == null) {
-                Draw.setHint(Hint, "请选择一个节点");
+                setHint(Hint, "请选择一个节点");
                 return;
             }
             if (CurNode.isRoot()) {
-                Draw.setHint(Hint, "根节点无法被删除");
+                setHint(Hint, "根节点无法被删除");
                 return;
             }
-            Draw.DelNode(CurNode, A1);
+            DelNode(CurNode, A1);
             if (CurNode.getparent().isRoot()) {
-                if (TreeNode.getLchildren().contains(CurNode)) {
-                    TreeNode.getLchildren().remove(CurNode);
+                if (getLchildren().contains(CurNode)) {
+                    getLchildren().remove(CurNode);
                     root.getView().getChildren().remove(CurNode.getView());
                 } else {
-                    TreeNode.getRchildren().remove(CurNode);
+                    getRchildren().remove(CurNode);
                     root.getView().getChildren().remove(CurNode.getView());
                 }
             } else {
                 CurNode.getparent().getchildren().remove(CurNode);
                 CurNode.getparent().getView().getChildren().remove(CurNode.getView());
             }
-            Draw.update(root, A1);
+            update(root, A1);
             CurNode = null;
         });
         left_layout_button.setOnAction(event -> {
-            for (TreeNode tmp : TreeNode.getRchildren()) {
-                TreeNode.getLchildren().add(tmp);
+            for (TreeNode tmp : getRchildren()) {
+                getLchildren().add(tmp);
             }
-            TreeNode.getRchildren().clear();
-            Draw.update(root, A1);
+            getRchildren().clear();
+            update(root, A1);
         });
         right_layout_button.setOnAction(event -> {
-            for (TreeNode tmp : TreeNode.getLchildren()) {
-                TreeNode.getRchildren().add(tmp);
+            for (TreeNode tmp : getLchildren()) {
+                getRchildren().add(tmp);
             }
-            TreeNode.getLchildren().clear();
-            Draw.update(root, A1);
+            getLchildren().clear();
+            update(root, A1);
         });
         Automatic_layout_button.setOnAction(event -> {
-            Draw.GetDp();
-            Draw.update(root, A1);
+            GetDp();
+            update(root, A1);
         });
         Open_button.setOnAction(event -> {
             Stage tmpstage = new Stage();
@@ -199,17 +203,17 @@ public class Controller implements Initializable {
                 root.initNode(root, A1);
                 A1.getChildren().add(root);
                 treeview.setRoot(root.getView());
-                for (TreeNode tmp1 : TreeNode.getRchildren()) {
+                for (TreeNode tmp1 : getRchildren()) {
                     reload(root, tmp1, A1);
                 }
-                for (TreeNode tmp1 : TreeNode.getLchildren()) {
+                for (TreeNode tmp1 : getLchildren()) {
                     reload(root, tmp1, A1);
                 }
                 update(root, A1);
-                Draw.setHint(Hint, "文件打开成功");
+                setHint(Hint, "文件打开成功");
                 CurNode = null;
             } else {
-                Draw.setHint(Hint, "文件打开失败，文件已经损坏");
+                setHint(Hint, "文件打开失败，文件已经损坏");
             }
         });
         Save_button.setOnAction(event -> {
@@ -226,14 +230,14 @@ public class Controller implements Initializable {
                 fm.Save_File(root, file);
             } catch (Exception e) {
                 //不使用printStackTrace
-                Draw.setHint(Hint, "文件保存失败");
+                setHint(Hint, "文件保存失败");
             }
         });
         New_button.setOnAction(event -> {
             //新建前保存
             Save_button.fire();
-            TreeNode.getRchildren().clear();
-            TreeNode.getLchildren().clear();
+            getRchildren().clear();
+            getLchildren().clear();
             A1.getChildren().clear();
             root = new TreeNode("根节点");
             root.initNode(root, A1);
@@ -256,7 +260,7 @@ public class Controller implements Initializable {
             if (file != null) {
                 FileManger fm = new FileManger();
                 fm.export(A1, file);
-                Draw.setHint(Hint, "导出成功");
+                setHint(Hint, "导出成功");
             }
         });
         //添加外观按钮
@@ -391,17 +395,17 @@ public class Controller implements Initializable {
                     double zoomAmplitude = 0.01; //缩放幅度
                     double scaleRatio = 3;       //块与间距的缩放比例，块大小缩放要更快
                     if (scrollEvent.getDeltaY() < 0) {
-                        if (Draw.RecH > 10) {
-                            Draw.RecH *= (1 - scaleRatio * zoomAmplitude);
-                            Draw.RecW = Draw.RecH * 2.25;
-                            Draw.length_dis = Draw.RecW * 2 * (1 - zoomAmplitude);
+                        if (RecH > 10) {
+                            RecH *= (1 - scaleRatio * zoomAmplitude);
+                            RecW = RecH * 2.25;
+                            length_dis = RecW * 2 * (1 - zoomAmplitude);
                             refresh(root);
                         }
                     } else {
-                        if (Draw.RecH < 100) {
-                            Draw.RecH *= (1 + scaleRatio * zoomAmplitude);
-                            Draw.RecW = Draw.RecH * 2.25;
-                            Draw.length_dis = Draw.RecW * 2 * (1 + zoomAmplitude);
+                        if (RecH < 100) {
+                            RecH *= (1 + scaleRatio * zoomAmplitude);
+                            RecW = RecH * 2.25;
+                            length_dis = RecW * 2 * (1 + zoomAmplitude);
                             refresh(root);
                         }
                     }
@@ -411,6 +415,77 @@ public class Controller implements Initializable {
         //尝试实现根节点的拖拽功能
         //root.setOnMousePressed(this::onMousePressed);
         //root.setOnMouseDragged(this::onMouseDragged);
+
+        //实现目录树定位到节点
+        treeview.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                TreeViewItem item = (TreeViewItem) newValue;
+                int id = item.getId();
+                TreeNode findNode = find(root, id);
+                String style =
+                    "-fx-background-color:" + backgroundColor + ";-fx-background-radius:" + Integer.toString(radius) + ";";
+                String borderStyle = "-fx-control-inner-background:" + backgroundColor +
+                    ";-fx-border-color:" + borderColor + ";-fx-border-radius:" + Integer.toString(radius);
+                if (CurNode != null) {
+                    CurNode.setStyle(style);
+                }
+                findNode.setStyle(style + borderStyle);
+                CurNode = findNode;
+            }
+        });
+        //在目录树选中节点也可直接操作节点
+        treeview.setOnKeyPressed(event -> {
+            //按键多的先检测，不然会被覆盖掉
+            if (event.getCode() == KeyCode.ENTER && event.isShiftDown() && event.isControlDown()) {
+                AddBro_Button.fire();
+            } else if (event.getCode() == KeyCode.DELETE && event.isShiftDown() && event.isControlDown()) {
+                Del_Button.fire();
+            } else if (event.getCode() == KeyCode.L && event.isControlDown() && event.isShiftDown()) {
+                left_layout_button.fire();
+            } else if (event.getCode() == KeyCode.R && event.isControlDown() && event.isShiftDown()) {
+                right_layout_button.fire();
+            } else if (event.getCode() == KeyCode.A && event.isControlDown() && event.isShiftDown()) {
+                Automatic_layout_button.fire();
+            } else if (event.getCode() == KeyCode.ENTER && event.isControlDown()) {
+                AddSon_Button.fire();
+            } else if (event.getCode() == KeyCode.O && event.isControlDown()) {
+                Open_button.fire();
+            } else if (event.getCode() == KeyCode.S && event.isControlDown()) {
+                Save_button.fire();
+            } else if (event.getCode() == KeyCode.P && event.isControlDown()) {
+                Export_button.fire();
+            }
+        });
+    }
+
+    TreeNode find(TreeNode cur, int id) {
+        if (root.getView().getId() == id) return root;
+        TreeNode tmp = null;
+        //左边的所有二级节点
+        for (TreeNode node : getRchildren()) {
+            tmp = findSon(node, id);
+            if (tmp != null) return tmp;
+        }
+        //右边的所有二级节点
+        for (TreeNode node : getLchildren()) {
+            tmp = findSon(node, id);
+            if (tmp != null) return tmp;
+        }
+        return null;
+    }
+
+    //遍历以二级节点为跟的子树的所有节点
+    TreeNode findSon(TreeNode curRoot, int id) {
+        System.out.println(curRoot.getView().getId());
+        if (curRoot.getView().getId() == id) {
+            return curRoot;
+        }
+        TreeNode tmp;
+        for (TreeNode node : curRoot.getchildren()) {
+            tmp = findSon(node, id);
+            if (tmp != null) return tmp;
+        }
+        return null;
     }
 
     //color转换Hex编码
@@ -434,13 +509,13 @@ public class Controller implements Initializable {
         A1.getChildren().clear();
         root.initNode(root, A1);
         A1.getChildren().add(root);
-        for (TreeNode node : TreeNode.getLchildren()) {
+        for (TreeNode node : getLchildren()) {
             reload(root, node, A1);
         }
-        for (TreeNode node : TreeNode.getRchildren()) {
+        for (TreeNode node : getRchildren()) {
             reload(root, node, A1);
         }
-        Draw.update(root, A1);
+        update(root, A1);
     }
 
     public void setStage(Stage stage) {

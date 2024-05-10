@@ -130,7 +130,7 @@ public class TreeNode extends TextField implements Serializable {
                 + ";-fx-background-radius:" + Integer.toString(radius) + ";");
             String borderStyle = "-fx-control-inner-background:" + backgroundColor +
                 ";-fx-border-color:" + borderColor + ";-fx-border-radius:" + Integer.toString(radius);
-
+            System.out.println(this.getView().getId());
             if (CurNode != null) {
                 //上一个选中节点回到默认样式
                 CurNode.setEditable(false);
@@ -159,6 +159,7 @@ public class TreeNode extends TextField implements Serializable {
             }
         });
 
+        //文本变化监听器
         super.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
