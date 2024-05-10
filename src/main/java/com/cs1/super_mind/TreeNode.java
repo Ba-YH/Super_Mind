@@ -128,7 +128,7 @@ public class TreeNode extends TextField implements Serializable {
         this.setOnMouseClicked(event -> {
             defaultStyle.set("-fx-background-color:" + backgroundColor
                 + ";-fx-background-radius:" + Integer.toString(radius) + ";");
-            String borderStyle = "-fx-control-inner-background:" + backgroundColor +
+            String borderStyle = "-fx-border-width: 2px;-fx-control-inner-background:" + backgroundColor +
                 ";-fx-border-color:" + borderColor + ";-fx-border-radius:" + Integer.toString(radius);
             System.out.println(this.getView().getId());
             if (CurNode != null) {

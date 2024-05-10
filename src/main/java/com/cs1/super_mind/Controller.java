@@ -5,8 +5,12 @@ import com.jfoenix.controls.JFXNodesList;
 import com.jfoenix.controls.JFXTreeView;
 import com.sun.javafx.iio.gif.GIFDescriptor;
 import com.sun.source.tree.Tree;
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -20,9 +24,11 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 import javax.swing.text.Position;
 import javax.swing.text.View;
+import javafx.event.ActionEvent;
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
@@ -424,13 +430,28 @@ public class Controller implements Initializable {
                 TreeNode findNode = find(root, id);
                 String style =
                     "-fx-background-color:" + backgroundColor + ";-fx-background-radius:" + Integer.toString(radius) + ";";
-                String borderStyle = "-fx-control-inner-background:" + backgroundColor +
+                String borderStyle = "-fx-border-width: 2px;-fx-control-inner-background:" + backgroundColor +
                     ";-fx-border-color:" + borderColor + ";-fx-border-radius:" + Integer.toString(radius);
                 if (CurNode != null) {
                     CurNode.setStyle(style);
                 }
-                findNode.setStyle(style + borderStyle);
                 CurNode = findNode;
+                Timeline blinkAnimation = new Timeline(
+                    new KeyFrame(Duration.seconds(0.5),
+                        event -> CurNode.setStyle(style+borderStyle)),
+                    new KeyFrame(Duration.seconds(1),
+                        event -> CurNode.setStyle(style+"-fx-border-width:2px;-fx-border-color: transparent; " +
+                            "-fx-border-width: 2px;"))
+                );
+                blinkAnimation.setCycleCount(2);     // 闪烁两次，总共两秒
+                blinkAnimation.setAutoReverse(true); // 使动画在第二次播放时逆向执行，回到初始状态
+                blinkAnimation.setOnFinished(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        CurNode.setStyle(style+borderStyle);
+                    }
+                });
+                blinkAnimation.play();
             }
         });
         //在目录树选中节点也可直接操作节点
