@@ -530,6 +530,9 @@ public class Controller implements Initializable {
         A1.getChildren().clear();
         root.initNode(root, A1);
         A1.getChildren().add(root);
+        //目录树也需要清空
+        treeview.setRoot(null);
+        treeview.setRoot(root.getView());
         for (TreeNode node : getLchildren()) {
             reload(root, node, A1);
         }
