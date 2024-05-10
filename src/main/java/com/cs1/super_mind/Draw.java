@@ -211,23 +211,26 @@ public abstract class Draw {
             sum += tmp.getSonSize();
             tmplist.add(tmp);
         }
-        //dp[i][j]=1/0 表示前i个节点的孩子个数中选择若干个是1否0达到j
-        //pre[i][j]=1/0 表示前i个节点的孩子个数中选择若干个达到j是1否0需要i的参与
+        //动态规划 类01背包问题+逆向求解背包
+        //dp[i][j]=1/0 表示前i个节点构成的集合 能1否0 选出一个子集和为j
+        //select[i][j]=1/0 构成上诉选出的子集中 能1不能0 出现第i个数值
         int[][] dp = new int[tmplist.size() + 1][sum + 1];
-        int[][] pre = new int[tmplist.size() + 1][sum + 1];
+        int[][] select = new int[tmplist.size() + 1][sum + 1];
         dp[0][0] = 1;
         for (int i = 1; i <= tmplist.size(); i++) {
             for (int j = 0; j <= sum; j++) {
                 if (j - tmplist.get(i - 1).getSonSize() >= 0 && dp[i - 1][j - tmplist.get(i - 1).getSonSize()] == 1) {
+                    //dp[i-1][j-value]需要选tmplist[i]的情况
                     dp[i][j] = 1;
-                    pre[i][j] = i;
-                } else if (dp[i - 1][j] == 1) {
+                    select[i][j] = 1;
+                }
+                if (dp[i - 1][j] == 1) {
+                    //dp[i-1][j] 不能选的情况，这里不需要设置pre[i][j]
                     dp[i][j] = 1;
-                    pre[i][j] = 0;
                 }
             }
         }
-        //得到最小的二分集差值
+        //遍历得到二分集的差的最小值
         int p = 0;
         int minn = 99999999;
         boolean[] st = new boolean[tmplist.size() + 1];
@@ -237,11 +240,11 @@ public abstract class Draw {
                 p = i;
             }
         }
-        //根据pre数组，标记出其中一个集合选择的若干节点
+        //逆向解背包，根据select数组判断要不要选当前的数值添加到集合
         for (int i = tmplist.size(); i >= 1; i--) {
-            if (pre[i][p] != 0) {
-                st[pre[i][p]] = true;
-                p -= tmplist.get(pre[i][p] - 1).getSonSize();
+            if (select[i][p] != 0) {
+                st[i] = true;
+                p -= tmplist.get(i - 1).getSonSize();
             }
         }
         //将两个集合分散到根节点左右两边表示
