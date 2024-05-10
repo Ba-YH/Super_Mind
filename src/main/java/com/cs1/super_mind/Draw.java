@@ -16,6 +16,7 @@ public abstract class Draw {
     public static  double length_dis = 200; //横向间距
     public static  final double Block_dis = 24;//纵向间距固定
     public static TreeNode CurNode;
+    public static int number;
     /**
      * 更新整棵树的所有节点的块上下大小
      *
@@ -177,6 +178,7 @@ public abstract class Draw {
      */
     public static void reload(TreeNode root, TreeNode a, AnchorPane A1) {
         a.initNode(root, A1); // 初始化待重新加载的节点
+        a.getView().setId(++number);
         a.getparent().getView().getChildren().add(a.getView()); // 将节点视图添加到其父节点的视图中
         A1.getChildren().add(a); // 将节点添加到AnchorPane中
         A1.getChildren().add(a.getLine()); // 将节点的连线添加到AnchorPane中
