@@ -63,9 +63,9 @@ public class TreeNode extends TextField implements Serializable {
     TreeNode(String txt1) {
         setTxt(txt1);
         BlockLen = Draw.RecH;
-        super.setPrefHeight(Draw.RecH);
-        super.setPrefWidth(50);
-        setTextLen(RecW);
+        super.setPrefHeight(RecH);
+        super.setPrefWidth(RecW);
+        setTextLen(txt.length()*30);
         type = 1;
         children = new ArrayList<>();
         line = new Line();
@@ -166,7 +166,7 @@ public class TreeNode extends TextField implements Serializable {
                 txt = TreeNode.super.getText();
                 view.setValue(txt);
                 //更新节点的宽度
-                TreeNode.super.setPrefWidth(Math.max(TreeNode.super.getText().length() * 24, RecW));
+                TreeNode.super.setPrefWidth(Math.max(TreeNode.super.getText().length() * 30, RecW));
                 TextLen = TreeNode.super.getPrefWidth();
                 update(root, A1);
             }
