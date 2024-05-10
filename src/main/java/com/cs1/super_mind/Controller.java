@@ -436,14 +436,14 @@ public class Controller implements Initializable {
                     CurNode.setStyle(style);
                 }
                 CurNode = findNode;
+                //播放动画实现闪烁效果
                 Timeline blinkAnimation = new Timeline(
                     new KeyFrame(Duration.seconds(0.5),
                         event -> CurNode.setStyle(style+borderStyle)),
-                    new KeyFrame(Duration.seconds(1),
-                        event -> CurNode.setStyle(style+"-fx-border-width:2px;-fx-border-color: transparent; " +
-                            "-fx-border-width: 2px;"))
+                    new KeyFrame(Duration.seconds(0.1),
+                        event -> CurNode.setStyle(style))
                 );
-                blinkAnimation.setCycleCount(2);     // 闪烁两次，总共两秒
+                blinkAnimation.setCycleCount(3);     // 闪烁两次，总共两秒
                 blinkAnimation.setAutoReverse(true); // 使动画在第二次播放时逆向执行，回到初始状态
                 blinkAnimation.setOnFinished(new EventHandler<ActionEvent>() {
                     @Override
