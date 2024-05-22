@@ -240,6 +240,9 @@ public class Controller implements Initializable {
             }
         });
         New_button.setOnAction(event -> {
+            RecH = 48;
+            RecW = RecH * 2.25;
+            length_dis = 200;
             //新建前保存
             Save_button.fire();
             getRchildren().clear();
