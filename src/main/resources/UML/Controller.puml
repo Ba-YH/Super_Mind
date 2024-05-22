@@ -1,0 +1,74 @@
+@startuml
+
+class TreeNode {
+    -String name
+    -TreeNode parent
+    -ArrayList<TreeNode> children
+    -boolean isRoot
+    -int type
+    +View view
+    {static} -ArrayList<TreeNode> lchildren
+    {static} -ArrayList<TreeNode> rchildren
+    +int layoutX
+    +int layoutY
+    +boolean editable
+    {static} +String font_type
+    +TreeNode()
+    +TreeNode(String)
+    +initNode(TreeNode, AnchorPane)
+    +get/set methods
+}
+
+class Draw {
+    {static} +int RecH
+    {static} +int RecW
+    {static} +double length_dis
+    {static} +String backgroundColor
+    {static} +String borderColor
+    {static} +TreeNode CurNode
+    {static} +void setHint(Label, String)
+    {static} +void DelNode(TreeNode, AnchorPane)
+    {static} +void GetDp()
+    {static} +void update(TreeNode, AnchorPane)
+    {static} +void reload(TreeNode, TreeNode, AnchorPane)
+}
+
+class FileManger {
+    +Object Open_File(File)
+    +void Save_File(TreeNode, File)
+    +void export(AnchorPane, File)
+}
+
+class Controller {
+    -AnchorPane A1
+    -TreeNode root
+    -JFXTreeView treeview
+    -JFXButton AddSon_Button
+    -JFXButton AddBro_Button
+    -JFXButton Del_Button
+    -JFXButton left_layout_button
+    -JFXButton right_layout_button
+    -JFXButton Automatic_layout_button
+    -ScrollPane Scrollpane
+    -JFXButton File_button
+    -JFXButton Save_button
+    -JFXButton Open_button
+    -JFXButton New_button
+    -JFXButton Export_button
+    -JFXNodesList Menubar
+    -Label Hint
+    -JFXButton Appearance_button
+    +void initialize(URL, ResourceBundle)
+    +refresh(TreeNode)
+    {static} +String toHex(Color)
+    {static} +Color getComplementaryColor(Color)
+}
+
+TreeNode "1" -- "0..*" TreeNode : children
+TreeNode "1" -- "0..1" TreeNode : parent
+
+Controller -- TreeNode
+Controller -- Draw
+Controller -- FileManger
+
+@enduml

@@ -1,0 +1,55 @@
+@startuml
+
+class TreeNode {
+    -backgroundColor: String
+    -borderColor: String
+    -radius: int
+    -LBlockLen: double
+    -RBlockLen: double
+    -font_type: String
+    -LMaxLinkLen: double
+    -RMaxLinkLen: double
+    -Lchildren: ArrayList<TreeNode>
+    -Rchildren: ArrayList<TreeNode>
+    -BlockLen: double
+    -SonSize: int
+    -TextLen: double
+    -MaxLinkLen: double
+    -type: int
+    -isroot: boolean
+    -parent: TreeNode
+    -view: TreeViewItem
+    -children: ArrayList<TreeNode>
+    -line: Line
+    -txt: String
+    +getLchildren(): ArrayList<TreeNode>
+    +getRchildren(): ArrayList<TreeNode>
+    +setLchildren(ArrayList<TreeNode>): void
+    +setRchildren(ArrayList<TreeNode>): void
+    +getTxt(): String
+    +getView(): TreeViewItem
+    +getparent(): TreeNode
+    +getMaxLinkLen(): double
+    +getTextLen(): double
+    +setTextLen(double): void
+    +setMaxLinkLen(double): void
+    +setParent(TreeNode): void
+    +isRoot(): boolean
+    +setIsroot(boolean): void
+    +getchildren(): ArrayList<TreeNode>
+    +initNode(TreeNode, AnchorPane): void
+    +getLine(): Line
+    +getType(): int
+    +setType(int): void
+    +getBlockLen(): double
+    +setBlockLen(double): void
+    +getSonSize(): int
+    +setSonSize(int): void
+}
+
+TreeNode -- ArrayList
+TreeNode -- AnchorPane
+TreeNode -- TreeViewItem
+TreeNode -- Line
+
+@enduml

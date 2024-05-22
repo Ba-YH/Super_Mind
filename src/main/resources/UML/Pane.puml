@@ -1,0 +1,9 @@
+@startuml
+
+class Pane {
+    +update_pane(AnchorPane, TreeNode): void
+}
+
+Pane --|> Object
+
+@enduml

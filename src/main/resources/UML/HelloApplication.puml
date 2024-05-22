@@ -1,0 +1,11 @@
+@startuml
+
+class HelloApplication {
+    -Stage stage
+    +start(Stage)
+    +main(String[])
+}
+
+HelloApplication -- Stage
+
+@enduml

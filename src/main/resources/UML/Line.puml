@@ -1,0 +1,9 @@
+@startuml
+
+class Line extends CubicCurve {
+    +SetLine(double, double, double, double): void
+}
+
+Line -- CubicCurve
+
+@enduml

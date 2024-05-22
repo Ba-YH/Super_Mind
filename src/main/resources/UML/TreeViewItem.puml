@@ -1,0 +1,11 @@
+@startuml
+
+class TreeViewItem {
+    +TreeViewItem(String)
+    +toString(): String
+}
+
+TreeViewItem --|> TreeItem
+TreeViewItem --|> Object
+
+@enduml

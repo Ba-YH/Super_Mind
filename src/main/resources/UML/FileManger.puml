@@ -1,0 +1,14 @@
+@startuml
+
+class FileManger {
+    +Save_File(TreeNode, File)
+    +Open_File(File): Object
+    -WriteObject(Object, File)
+    -readObject(File): Object
+    +export(AnchorPane, File)
+}
+
+FileManger -- TreeNode
+FileManger -- File
+
+@enduml

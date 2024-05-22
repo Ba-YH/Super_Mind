@@ -1,0 +1,24 @@
+@startuml
+
+class Draw {
+    -RecH: double
+    -RecW: double
+    -length_dis: double
+    -Block_dis: final double
+    -CurNode: TreeNode
+    +update_len(TreeNode): void
+    +update_pos(TreeNode, int): void
+    -SetSon(TreeNode, double, TreeNode): double
+    +DelNode(TreeNode, AnchorPane): void
+    +update(TreeNode, AnchorPane): void
+    +reload(TreeNode, TreeNode, AnchorPane): void
+    +setHint(Label, String): void
+    +GetDp(): void
+    +DFS(TreeNode): void
+}
+
+Draw -- TreeNode
+Draw -- AnchorPane
+Draw -- Label
+
+@enduml
