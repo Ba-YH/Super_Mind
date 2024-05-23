@@ -29,7 +29,5 @@ public class Line extends CubicCurve implements Serializable {
         super.setFill(Color.TRANSPARENT);
         // 设置贝塞尔曲线的描边颜色为黑色
         super.setStroke(Color.BLACK);
-        // 设置贝塞尔曲线的描边颜色为黄色，使用字符串转换方法
-        // super.setStroke(Color.web(String.valueOf(Color.YELLOW)));
     }
 }

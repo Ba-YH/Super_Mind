@@ -3,14 +3,8 @@ package com.cs1.super_mind;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXNodesList;
 import com.jfoenix.controls.JFXTreeView;
-import com.sun.javafx.iio.gif.GIFDescriptor;
-import com.sun.source.tree.Tree;
-import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -27,9 +21,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-import javax.swing.text.Position;
-import javax.swing.text.View;
-
 import javafx.event.ActionEvent;
 
 import java.io.File;
@@ -43,11 +34,10 @@ import static com.cs1.super_mind.TreeNode.*;
 
 public class Controller implements Initializable {
     @FXML
-    private AnchorPane A1;//添加节点的地方
+    private AnchorPane A1;// 主操作面板
     static TreeNode root;
     @FXML
     private JFXTreeView treeview;
-
     @FXML
     private JFXButton AddSon_Button;
     @FXML
@@ -78,26 +68,13 @@ public class Controller implements Initializable {
     private Label Hint;
     @FXML
     private JFXButton Appearance_button;
-    public static double orgSceneX = 500, orgSceneY = 310;
-    public static double orgTranslateX, orgTranslateY;
-    private Stage stage;
+    public static double orgSceneX = 500, orgSceneY = 310;// 滚动条初始位置
+    private Stage stage;// 应用程序的Stage对象
+    private int number;// 节点在树形视图中唯一ID
+    private final Map<String, Runnable> keyActionMap = new HashMap<>();// 快捷键Hash表
+
     public void setStage(Stage stage) {
         this.stage = stage;
-    }
-    private int number;
-    private final Map<String, Runnable> keyActionMap = new HashMap<>();
-
-    // 快捷键映射表
-    private void initializeKeyActionMap() {
-        keyActionMap.put("CONTROL_SHIFT_ENTER", () -> AddBro_Button.fire());
-        keyActionMap.put("CONTROL_SHIFT_DELETE", () -> Del_Button.fire());
-        keyActionMap.put("CONTROL_SHIFT_L", () -> left_layout_button.fire());
-        keyActionMap.put("CONTROL_SHIFT_R", () -> right_layout_button.fire());
-        keyActionMap.put("CONTROL_SHIFT_A", () -> Automatic_layout_button.fire());
-        keyActionMap.put("CONTROL_ENTER", () -> AddSon_Button.fire());
-        keyActionMap.put("CONTROL_O", () -> Open_button.fire());
-        keyActionMap.put("CONTROL_S", () -> Save_button.fire());
-        keyActionMap.put("CONTROL_P", () -> Export_button.fire());
     }
 
     @Override
@@ -114,7 +91,8 @@ public class Controller implements Initializable {
         treeview.setRoot(root.getView());
         Menubar.setSpacing(10);
 
-        AddSon_Button.setOnAction(event -> {//添加节点按键
+        //添加子节点按键
+        AddSon_Button.setOnAction(event -> {
             if (CurNode == null) {
                 setHint(Hint, "请选择一个节点");
                 return;
@@ -143,8 +121,7 @@ public class Controller implements Initializable {
             update(root, A1);
         });
 
-
-
+        //添加兄弟节点按键
         AddBro_Button.setOnAction(event -> {
             if (CurNode == null) {
                 setHint(Hint, "请选择一个节点");
@@ -177,9 +154,8 @@ public class Controller implements Initializable {
             update(root, A1);
         });
 
-
-
-        Del_Button.setOnAction(event -> {//删除节点按键
+        //删除节点按键
+        Del_Button.setOnAction(event -> {
             if (CurNode == null) {
                 setHint(Hint, "请选择一个节点");
                 return;
@@ -205,8 +181,7 @@ public class Controller implements Initializable {
             CurNode = null;
         });
 
-
-
+        //左布局按键
         left_layout_button.setOnAction(event -> {
             for (TreeNode tmp : getRchildren()) {
                 getLchildren().add(tmp);
@@ -215,7 +190,7 @@ public class Controller implements Initializable {
             update(root, A1);
         });
 
-
+        //右布局按键
         right_layout_button.setOnAction(event -> {
             for (TreeNode tmp : getLchildren()) {
                 getRchildren().add(tmp);
@@ -224,13 +199,13 @@ public class Controller implements Initializable {
             update(root, A1);
         });
 
-
+        //右布局按键
         Automatic_layout_button.setOnAction(event -> {
             GetDp();
             update(root, A1);
         });
 
-
+        //打开文件按键
         Open_button.setOnAction(event -> {
             Stage tmpstage = new Stage();
             FileChooser fileChooser = new FileChooser();
@@ -259,7 +234,7 @@ public class Controller implements Initializable {
             }
         });
 
-
+        //保存文件按键
         Save_button.setOnAction(event -> {
             FileManger fm = new FileManger();
             Stage tmpstage = new Stage();
@@ -278,7 +253,7 @@ public class Controller implements Initializable {
             }
         });
 
-
+        //新建文件按键
         New_button.setOnAction(event -> {
             RecH = 48;
             RecW = RecH * 2.25;
@@ -298,14 +273,14 @@ public class Controller implements Initializable {
             CurNode = null;
         });
 
-
+        //导出图像按键
         Export_button.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("导出");
             fileChooser.setInitialFileName("test1");
             fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("JPG", "*.jpg"),
-                new FileChooser.ExtensionFilter("PNG", "*.png")
+                    new FileChooser.ExtensionFilter("JPG", "*.jpg"),
+                    new FileChooser.ExtensionFilter("PNG", "*.png")
             );
             File file = fileChooser.showSaveDialog(new Stage());
             if (file != null) {
@@ -315,8 +290,7 @@ public class Controller implements Initializable {
             }
         });
 
-
-
+        //更改外观按键
         Appearance_button.setOnAction(actionEvent -> {
             //网格布局
             GridPane gridPane = new GridPane();
@@ -328,17 +302,7 @@ public class Controller implements Initializable {
 
             Label label1 = new Label("请选择节点颜色：");
             GridPane.setConstraints(label1, 0, 0);
-            /*下拉框选择颜色
-            HashMap<String, String> color = new HashMap<>();
-            color.put("Red", "#FF0000");
-            color.put("Yellow", "#F9AA33");
-            color.put("Bule", "#0000FF");
-            GridPane.setConstraints(colorPicker,0,2,2,2);
-            ComboBox<String> colorComboBox = new ComboBox<>();
-            colorComboBox.getItems().addAll("Red", "Yellow", "Blue");
-            colorComboBox.setValue("Yellow");
-            GridPane.setConstraints(colorComboBox,1,0);
-             */
+
             ColorPicker colorPicker = new ColorPicker();
             colorPicker.setValue(Color.valueOf(backgroundColor));
             GridPane.setConstraints(colorPicker, 1, 0);
@@ -359,42 +323,40 @@ public class Controller implements Initializable {
             gridPane.getChildren().addAll(label1, colorPicker, label2, fontComboBox, button);
             Scene scene = new Scene(gridPane, 400, 200);
             Stage window = new Stage();
-            window.getIcons().add(new Image("img/main.png"));
+            window.getIcons().add(new Image("img/icon.png"));
             window.setScene(scene);
             window.setTitle("外观设置");
             window.show();
             button.setOnAction(actionEvent1 -> {
-                    String selectedFont = fontComboBox.getValue();
-                    TreeNode.font_type = selectedFont;
+                        String selectedFont = fontComboBox.getValue();
+                        TreeNode.font_type = selectedFont;
 
-                    Color color = colorPicker.getValue();
-                    String colorHex = toHex(color);
-                    backgroundColor = colorHex;
-                    //borderColor = toHex(getComplementaryColor(color));
-                    String style = "-fx-background-color: " + colorHex + "; -fx-background-radius: 10px;";
-                    String style2 = "-fx-background-color:" + colorHex;
-                    //改变按钮颜色
-                    AddBro_Button.setStyle(style);
-                    AddSon_Button.setStyle(style);
-                    Del_Button.setStyle(style);
-                    File_button.setStyle(style);
-                    Appearance_button.setStyle(style);
-                    Save_button.setStyle(style2);
-                    Open_button.setStyle(style2);
-                    Export_button.setStyle(style2);
-                    New_button.setStyle(style2);
-                    //改变节点颜色
-                    root.setStyle(style2);
-                    for (Node node : A1.getChildren()) {
-                        node.setStyle(style2);
+                        Color color = colorPicker.getValue();
+                        String colorHex = toHex(color);
+                        backgroundColor = colorHex;
+                        //borderColor = toHex(getComplementaryColor(color));
+                        String style = "-fx-background-color: " + colorHex + "; -fx-background-radius: 10px;";
+                        String style2 = "-fx-background-color:" + colorHex;
+                        //改变按钮颜色
+                        AddBro_Button.setStyle(style);
+                        AddSon_Button.setStyle(style);
+                        Del_Button.setStyle(style);
+                        File_button.setStyle(style);
+                        Appearance_button.setStyle(style);
+                        Save_button.setStyle(style2);
+                        Open_button.setStyle(style2);
+                        Export_button.setStyle(style2);
+                        New_button.setStyle(style2);
+                        //改变节点颜色
+                        root.setStyle(style2);
+                        for (Node node : A1.getChildren()) {
+                            node.setStyle(style2);
+                        }
+                        //确定自动关闭窗口
+                        window.close();
                     }
-                    //确定自动关闭窗口
-                    window.close();
-                }
             );
-
         });
-
 
         //面板获取焦点
         Scrollpane.setOnMouseClicked(event -> {
@@ -406,16 +368,18 @@ public class Controller implements Initializable {
             if (CurNode != null) {
                 CurNode.setEditable(false);
                 CurNode.setStyle(
-                    "-fx-background-color:" + backgroundColor + ";" +
-                        "-fx-background-radius:" + Integer.toString(radius)
+                        "-fx-background-color:" + backgroundColor + ";" +
+                                "-fx-background-radius:" + Integer.toString(radius)
                 );
                 CurNode = null;
             }
         });
-        //为面板设立按钮的键盘触发事件
+
+        //按键键盘触发事件
         Scrollpane.setOnKeyPressed(event -> {
             shortcutSet(event);
         });
+
         //添加ctrl+wheel 事件实现缩放
         Scrollpane.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
             if (event.isControlDown()) {
@@ -442,9 +406,6 @@ public class Controller implements Initializable {
                 });
             }
         });
-        //尝试实现根节点的拖拽功能
-        //root.setOnMousePressed(this::onMousePressed);
-        //root.setOnMouseDragged(this::onMouseDragged);
 
         //实现目录树定位到节点
         treeview.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -453,10 +414,10 @@ public class Controller implements Initializable {
                 int id = item.getId();
                 TreeNode findNode = find(root, id);
                 String style = "-fx-background-color:" + backgroundColor +
-                               ";-fx-background-radius:" + Integer.toString(radius) + ";";
-                String borderStyle = "-fx-border-width: 2px;-fx-control-inner-background:" + backgroundColor+
-                                     ";-fx-border-color:" + borderColor +
-                                     ";-fx-border-radius:" + Integer.toString(radius);
+                        ";-fx-background-radius:" + Integer.toString(radius) + ";";
+                String borderStyle = "-fx-border-width: 2px;-fx-control-inner-background:" + backgroundColor +
+                        ";-fx-border-color:" + borderColor +
+                        ";-fx-border-radius:" + Integer.toString(radius);
 
                 if (CurNode != null) {
                     CurNode.setStyle(style);
@@ -464,10 +425,10 @@ public class Controller implements Initializable {
                 CurNode = findNode;
                 //播放动画实现闪烁效果
                 Timeline blinkAnimation = new Timeline(
-                    new KeyFrame(Duration.seconds(0.5),
-                        event -> CurNode.setStyle(style + borderStyle)),
-                    new KeyFrame(Duration.seconds(0.1),
-                        event -> CurNode.setStyle(style))
+                        new KeyFrame(Duration.seconds(0.5),
+                                event -> CurNode.setStyle(style + borderStyle)),
+                        new KeyFrame(Duration.seconds(0.1),
+                                event -> CurNode.setStyle(style))
                 );
                 blinkAnimation.setCycleCount(3);     // 闪烁两次，总共两秒
                 blinkAnimation.setAutoReverse(true); // 使动画在第二次播放时逆向执行，回到初始状态
@@ -480,12 +441,14 @@ public class Controller implements Initializable {
                 blinkAnimation.play();
             }
         });
+
         //在目录树选中节点也可直接操作节点
         treeview.setOnKeyPressed(event -> {
             shortcutSet(event);
         });
     }
 
+    // 通过id查找TreeViewItem的节点
     TreeNode find(TreeNode cur, int id) {
         if (root.getView().getId() == id) return root;
         TreeNode tmp = null;
@@ -502,7 +465,7 @@ public class Controller implements Initializable {
         return null;
     }
 
-    //遍历以二级节点为跟的子树的所有节点
+    // 通过id查找子节点
     TreeNode findSon(TreeNode curRoot, int id) {
         System.out.println(curRoot.getView().getId());
         if (curRoot.getView().getId() == id) {
@@ -516,23 +479,15 @@ public class Controller implements Initializable {
         return null;
     }
 
-    //color转换Hex编码
+    // color转换Hex编码
     public static String toHex(Color color) {
         return String.format("#%02X%02X%02X",
-            (int) (color.getRed() * 255),
-            (int) (color.getGreen() * 255),
-            (int) (color.getBlue() * 255));
+                (int) (color.getRed() * 255),
+                (int) (color.getGreen() * 255),
+                (int) (color.getBlue() * 255));
     }
 
-    //获取互补色，边框颜色为节点颜色的互补色
-    public static Color getComplementaryColor(Color color) {
-        double red = 255 - color.getRed();
-        double green = 255 - color.getGreen();
-        double blue = 255 - color.getBlue();
-        return Color.rgb((int) red, (int) green, (int) blue);
-    }
-
-    //调整大小后，不改变位置的刷新页面
+    // 缩放后，不改变节点相对位置而刷新页面
     void refresh(TreeNode root) {
         A1.getChildren().clear();
         root.initNode(root, A1);
@@ -550,36 +505,32 @@ public class Controller implements Initializable {
         update(root, A1);
     }
 
+    // 快捷键Hash表
+    private void initializeKeyActionMap() {
+        keyActionMap.put("CONTROL_SHIFT_ENTER", () -> AddBro_Button.fire());
+        keyActionMap.put("CONTROL_SHIFT_DELETE", () -> Del_Button.fire());
+        keyActionMap.put("CONTROL_SHIFT_L", () -> left_layout_button.fire());
+        keyActionMap.put("CONTROL_SHIFT_R", () -> right_layout_button.fire());
+        keyActionMap.put("CONTROL_SHIFT_A", () -> Automatic_layout_button.fire());
+        keyActionMap.put("CONTROL_ENTER", () -> AddSon_Button.fire());
+        keyActionMap.put("CONTROL_O", () -> Open_button.fire());
+        keyActionMap.put("CONTROL_S", () -> Save_button.fire());
+        keyActionMap.put("CONTROL_P", () -> Export_button.fire());
+    }
 
-    //设置快捷键
+    // 设置快捷键
     public void shortcutSet(KeyEvent event) {
         if (event.getCode() != null) {
+            // 根据是否按下Control修饰键，添加"CONTROL_"前缀
+            // 根据是否按下Shift修饰键，添加"SHIFT_"前缀
+            // 添加键的名称，如"A", "S", "ENTER"等
             String keyCombination = (event.isControlDown() ? "CONTROL_" : "") +
-                (event.isShiftDown() ? "SHIFT_" : "") + event.getCode().name();
-
+                    (event.isShiftDown() ? "SHIFT_" : "") + event.getCode().name();
+            // 在keyActionMap中查找当前键组合对应的动作
             Runnable action = keyActionMap.get(keyCombination);
-            if (action != null) {
+            // 找到，执行
+            if (action != null)
                 action.run();
-            }
         }
     }
-    /*
-    private void onMousePressed(MouseEvent event) {
-        orgSceneX = event.getSceneX();
-        orgSceneY = event.getSceneY();
-        orgTranslateX = ((Button) (event.getSource())).getTranslateX();
-        orgTranslateY = ((Button) (event.getSource())).getTranslateY();
-    }
-
-    private void onMouseDragged(MouseEvent event) {
-        double offsetX = event.getSceneX() - orgSceneX;
-        double offsetY = event.getSceneY() - orgSceneY;
-        double newTranslateX = orgTranslateX + offsetX;
-        double newTranslateY = orgTranslateY + offsetY;
-
-        ((TextField) (event.getSource())).setTranslateX(newTranslateX);
-        ((TextField) (event.getSource())).setTranslateY(newTranslateY);
-        refresh(root);
-    }
-    */
 }

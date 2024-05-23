@@ -17,19 +17,17 @@ import java.util.concurrent.atomic.AtomicReference;
 import static com.cs1.super_mind.Draw.*;
 
 public class TreeNode extends TextField implements Serializable {
-    //节点背景颜色，全局静态常量
-    public static String backgroundColor = "#F9AA33";
-    //边框颜色，全局静态常量
-    public static String borderColor = "#FF1493";
-    public static int radius = 8;
-    public static double LBlockLen = Draw.RecH;
-    public static double RBlockLen = Draw.RecH;
-    public static String font_type = "微软雅黑";
+    public static String backgroundColor = "#F9AA33";//节点背景颜色
+    public static String borderColor = "#FF1493";//边框颜色
+    public static int radius = 8;// 边框圆角大小
+    public static double LBlockLen = Draw.RecH;// 左子树块长度
+    public static double RBlockLen = Draw.RecH;// 右子树块长度
+    public static String font_type = "微软雅黑";// 字体类型
 
-    public static double LMaxLinkLen;
-    public static double RMaxLinkLen;
+    public static double LMaxLinkLen;//最大左子链长度
+    public static double RMaxLinkLen;//最大右子链长度
     private static ArrayList<TreeNode> Lchildren = new ArrayList<>();//根节点的左子树
-    private static ArrayList<TreeNode> Rchildren = new ArrayList<>();//根节点的右子树子树
+    private static ArrayList<TreeNode> Rchildren = new ArrayList<>();//根节点的右子树
 
     public static ArrayList<TreeNode> getLchildren() {
         return Lchildren;
@@ -49,16 +47,16 @@ public class TreeNode extends TextField implements Serializable {
 
 
     private double BlockLen;//块长度
-    private int SonSize;
+    private int SonSize;//子节点总数
     private double TextLen;//文本宽度
     private double MaxLinkLen;//最长子链
-    private int type;//该节点向左还是向右 type =-1 向左，=1向右
-    private boolean isroot;
-    private TreeNode parent;
+    private int type;//该节点向左还是向右 type = -1 向左，= 1 向右
+    private boolean isroot;//是否根节点
+    private TreeNode parent;//父节点
     private TreeViewItem view;//该节点在TreeView上的视图
-    private ArrayList<TreeNode> children;
-    private Line line;
-    private String txt;
+    private ArrayList<TreeNode> children;//子节点列表
+    private Line line;//连线
+    private String txt;//文本
 
     TreeNode(String txt1) {
         setTxt(txt1);
@@ -120,6 +118,7 @@ public class TreeNode extends TextField implements Serializable {
         return children;
     }
 
+    //初始化节点
     public void initNode(TreeNode root, AnchorPane A1) {
         //默认节点样式，使用原子类安全的更新全局共享状态
         AtomicReference<String> defaultStyle = new AtomicReference<>("-fx-background-color:" + backgroundColor
@@ -188,7 +187,6 @@ public class TreeNode extends TextField implements Serializable {
     }
 
     public int getType() {
-
         return type;
     }
 

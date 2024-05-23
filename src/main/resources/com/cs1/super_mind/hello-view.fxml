@@ -23,6 +23,13 @@
          <font>
             <Font size="15.0" />
          </font>
+         <graphic>
+            <ImageView fitHeight="36.0" fitWidth="36.0">
+               <image>
+                  <Image url="@../../../img/外观.png" />
+               </image>
+            </ImageView>
+         </graphic>
       </JFXButton>
       <JFXButton fx:id="AddSon_Button" layoutX="290.0" layoutY="21.0" prefHeight="45.0" prefWidth="140.0" style="-fx-background-color: #FFA726; -fx-background-radius: 10px;" text="添加子节点">
          <font>
@@ -42,34 +49,69 @@
                <font>
                   <Font size="15.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="36.0" fitWidth="36.0">
+                     <image>
+                        <Image url="@../../../img/文件.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </JFXButton>
             <JFXButton fx:id="New_button" prefHeight="42.0" prefWidth="110.0" style="-fx-background-color: #FFA726;" text="新建">
                <font>
                   <Font size="15.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="26.0" fitWidth="26.0">
+                     <image>
+                        <Image url="@../../../img/新建.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </JFXButton>
             <JFXButton fx:id="Open_button" prefHeight="42.0" prefWidth="110.0" style="-fx-background-color: #FFA726;" text="打开">
                <font>
                   <Font size="15.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="26.0" fitWidth="26.0">
+                     <image>
+                        <Image url="@../../../img/打开.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </JFXButton>
             <JFXButton fx:id="Save_button" prefHeight="42.0" prefWidth="110.0" style="-fx-background-color: #FFA726;" text="保存">
                <font>
                   <Font size="15.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="26.0" fitWidth="26.0">
+                     <image>
+                        <Image url="@../../../img/保存.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </JFXButton>
             <JFXButton fx:id="Export_button" prefHeight="42.0" prefWidth="110.0" style="-fx-background-color: #FFA726;" text="导出">
                <font>
                   <Font size="15.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="26.0" fitWidth="26.0">
+                     <image>
+                        <Image url="@../../../img/导出.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </JFXButton>
          </children></JFXNodesList>
 
-      <JFXButton fx:id="Automatic_layout_button" layoutX="1075.0" layoutY="15.0" prefHeight="58.0" prefWidth="131.0" text="自动调整" textFill="WHITE">
+      <JFXButton fx:id="Automatic_layout_button" layoutX="1075.0" layoutY="15.0" prefHeight="58.0" prefWidth="150.0" text="自动布局" textFill="WHITE">
          <graphic>
-            <ImageView fitHeight="36.0" fitWidth="36.0">
+            <ImageView fitHeight="48.0" fitWidth="48.0">
                <image>
-                  <Image url="@../../../img/auto2.png" />
+                  <Image url="@../../../img/auto1.png" />
                </image>
             </ImageView>
          </graphic>
@@ -93,7 +135,7 @@
          <graphic>
             <ImageView fitHeight="48.0" fitWidth="48.0">
                <image>
-                  <Image url="@../../../img/bg-right.png" />
+                  <Image url="@../../../img/右布局1.png" />
                </image>
             </ImageView>
          </graphic>
@@ -105,7 +147,7 @@
          <graphic>
             <ImageView fitHeight="48.0" fitWidth="48.0">
                <image>
-                  <Image url="@../../../img/bg-left.png" />
+                  <Image url="@../../../img/左布局1.png" />
                </image>
             </ImageView>
          </graphic>
