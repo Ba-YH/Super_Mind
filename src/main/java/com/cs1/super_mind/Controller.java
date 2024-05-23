@@ -213,7 +213,8 @@ public class Controller implements Initializable {
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("super_mind files", "*.smind"));
             FileManger fm = new FileManger();
             TreeNode tmp = null;
-            tmp = (TreeNode) fm.Open_File(fileChooser.showOpenDialog(tmpstage));
+            File file = fileChooser.showOpenDialog(tmpstage);
+            stage.setTitle(file.getName());
             if (tmp != null) {
                 A1.getChildren().clear();
                 root = tmp;
@@ -386,19 +387,19 @@ public class Controller implements Initializable {
                 Scrollpane.addEventHandler(ScrollEvent.SCROLL, scrollEvent -> {
                     //向下滚动缩小
                     //tips:纵向块距不改变
-                    double zoomAmplitude = 0.01; //缩放幅度
+                    double zoomAmplitude = 0.02; //缩放幅度
                     double scaleRatio = 3;       //块与间距的缩放比例，块大小缩放要更快
                     if (scrollEvent.getDeltaY() < 0) {
                         if (RecH > 10) {
                             RecH *= (1 - scaleRatio * zoomAmplitude);
-                            RecW = RecH * 2.25;
+                            RecW =RecH* 2.25;
                             length_dis = RecW * 2 * (1 - zoomAmplitude);
                             refresh(root);
                         }
                     } else {
                         if (RecH < 100) {
                             RecH *= (1 + scaleRatio * zoomAmplitude);
-                            RecW = RecH * 2.25;
+                            RecW =RecH* 2.25;
                             length_dis = RecW * 2 * (1 + zoomAmplitude);
                             refresh(root);
                         }

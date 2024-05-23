@@ -13,6 +13,8 @@ import javafx.scene.text.Font;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static com.cs1.super_mind.Draw.*;
 
@@ -63,7 +65,7 @@ public class TreeNode extends TextField implements Serializable {
         BlockLen = Draw.RecH;
         super.setPrefHeight(RecH);
         super.setPrefWidth(RecW);
-        setTextLen(txt.length()*30);
+        setTextLen(108);
         type = 1;
         children = new ArrayList<>();
         line = new Line();
@@ -129,7 +131,7 @@ public class TreeNode extends TextField implements Serializable {
                 + ";-fx-background-radius:" + Integer.toString(radius) + ";");
             String borderStyle = "-fx-border-width: 2px;-fx-control-inner-background:" + backgroundColor +
                 ";-fx-border-color:" + borderColor + ";-fx-border-radius:" + Integer.toString(radius);
-            System.out.println(this.getView().getId());
+            System.out.println("当前节点 type属性："+this.type);
             if (CurNode != null) {
                 //上一个选中节点回到默认样式
                 CurNode.setEditable(false);
@@ -164,8 +166,9 @@ public class TreeNode extends TextField implements Serializable {
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 txt = TreeNode.super.getText();
                 view.setValue(txt);
+                String text=TreeNode.super.getText();
                 //更新节点的宽度
-                TreeNode.super.setPrefWidth(Math.max(TreeNode.super.getText().length() * 30, RecW));
+                TreeNode.super.setPrefWidth(Math.max(getvisualLength(text) * 26, RecW));
                 TextLen = TreeNode.super.getPrefWidth();
                 update(root, A1);
             }
@@ -181,7 +184,13 @@ public class TreeNode extends TextField implements Serializable {
         view = new TreeViewItem(this.txt);
         view.setExpanded(true);
     }
-
+    public int getvisualLength(String text){
+            Pattern pattern = Pattern.compile("[a-zA-Z]");
+            //[\u4E00-\u9FA5]是unicode2的中文区间
+            Matcher matcher = pattern.matcher(text);
+            String Chinese = matcher.replaceAll("");
+            return Chinese.length()+(text.length()-Chinese.length())/2;
+    }
     public Line getLine() {
         return line;
     }
