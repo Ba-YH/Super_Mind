@@ -10,6 +10,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -28,10 +29,13 @@ import javafx.util.Duration;
 
 import javax.swing.text.Position;
 import javax.swing.text.View;
+
 import javafx.event.ActionEvent;
+
 import java.io.File;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import static com.cs1.super_mind.Draw.*;
@@ -78,10 +82,24 @@ public class Controller implements Initializable {
     public static double orgTranslateX, orgTranslateY;
     private Stage stage;
     private int number;
+    private final Map<String, Runnable> keyActionMap = new HashMap<>();
+
+    // 快捷键映射表
+    private void initializeKeyActionMap() {
+        keyActionMap.put("CONTROL_SHIFT_ENTER", () -> AddBro_Button.fire());
+        keyActionMap.put("CONTROL_SHIFT_DELETE", () -> Del_Button.fire());
+        keyActionMap.put("CONTROL_SHIFT_L", () -> left_layout_button.fire());
+        keyActionMap.put("CONTROL_SHIFT_R", () -> right_layout_button.fire());
+        keyActionMap.put("CONTROL_SHIFT_A", () -> Automatic_layout_button.fire());
+        keyActionMap.put("CONTROL_ENTER", () -> AddSon_Button.fire());
+        keyActionMap.put("CONTROL_O", () -> Open_button.fire());
+        keyActionMap.put("CONTROL_S", () -> Save_button.fire());
+        keyActionMap.put("CONTROL_P", () -> Export_button.fire());
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        initializeKeyActionMap();
         //初始化根节点
         root = new TreeNode("根节点");
         Scrollpane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);//滚动条
@@ -374,26 +392,7 @@ public class Controller implements Initializable {
         });
         //为面板设立按钮的键盘触发事件
         Scrollpane.setOnKeyPressed(event -> {
-            //按键多的先检测，不然会被覆盖掉
-            if (event.getCode() == KeyCode.ENTER && event.isShiftDown() && event.isControlDown()) {
-                AddBro_Button.fire();
-            } else if (event.getCode() == KeyCode.DELETE && event.isShiftDown() && event.isControlDown()) {
-                Del_Button.fire();
-            } else if (event.getCode() == KeyCode.L && event.isControlDown() && event.isShiftDown()) {
-                left_layout_button.fire();
-            } else if (event.getCode() == KeyCode.R && event.isControlDown() && event.isShiftDown()) {
-                right_layout_button.fire();
-            } else if (event.getCode() == KeyCode.A && event.isControlDown() && event.isShiftDown()) {
-                Automatic_layout_button.fire();
-            } else if (event.getCode() == KeyCode.ENTER && event.isControlDown()) {
-                AddSon_Button.fire();
-            } else if (event.getCode() == KeyCode.O && event.isControlDown()) {
-                Open_button.fire();
-            } else if (event.getCode() == KeyCode.S && event.isControlDown()) {
-                Save_button.fire();
-            } else if (event.getCode() == KeyCode.P && event.isControlDown()) {
-                Export_button.fire();
-            }
+            shortcutSet(event);
         });
         //添加ctrl+wheel 事件实现缩放
         Scrollpane.addEventHandler(KeyEvent.KEY_PRESSED, event -> {
@@ -442,7 +441,7 @@ public class Controller implements Initializable {
                 //播放动画实现闪烁效果
                 Timeline blinkAnimation = new Timeline(
                     new KeyFrame(Duration.seconds(0.5),
-                        event -> CurNode.setStyle(style+borderStyle)),
+                        event -> CurNode.setStyle(style + borderStyle)),
                     new KeyFrame(Duration.seconds(0.1),
                         event -> CurNode.setStyle(style))
                 );
@@ -451,7 +450,7 @@ public class Controller implements Initializable {
                 blinkAnimation.setOnFinished(new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
-                        CurNode.setStyle(style+borderStyle);
+                        CurNode.setStyle(style + borderStyle);
                     }
                 });
                 blinkAnimation.play();
@@ -459,26 +458,7 @@ public class Controller implements Initializable {
         });
         //在目录树选中节点也可直接操作节点
         treeview.setOnKeyPressed(event -> {
-            //按键多的先检测，不然会被覆盖掉
-            if (event.getCode() == KeyCode.ENTER && event.isShiftDown() && event.isControlDown()) {
-                AddBro_Button.fire();
-            } else if (event.getCode() == KeyCode.DELETE && event.isShiftDown() && event.isControlDown()) {
-                Del_Button.fire();
-            } else if (event.getCode() == KeyCode.L && event.isControlDown() && event.isShiftDown()) {
-                left_layout_button.fire();
-            } else if (event.getCode() == KeyCode.R && event.isControlDown() && event.isShiftDown()) {
-                right_layout_button.fire();
-            } else if (event.getCode() == KeyCode.A && event.isControlDown() && event.isShiftDown()) {
-                Automatic_layout_button.fire();
-            } else if (event.getCode() == KeyCode.ENTER && event.isControlDown()) {
-                AddSon_Button.fire();
-            } else if (event.getCode() == KeyCode.O && event.isControlDown()) {
-                Open_button.fire();
-            } else if (event.getCode() == KeyCode.S && event.isControlDown()) {
-                Save_button.fire();
-            } else if (event.getCode() == KeyCode.P && event.isControlDown()) {
-                Export_button.fire();
-            }
+            shortcutSet(event);
         });
     }
 
@@ -534,7 +514,7 @@ public class Controller implements Initializable {
         root.initNode(root, A1);
         A1.getChildren().add(root);
         //目录树要重新编号
-        Draw.number=0;
+        Draw.number = 0;
         treeview.setRoot(null);
         treeview.setRoot(root.getView());
         for (TreeNode node : getLchildren()) {
@@ -550,6 +530,17 @@ public class Controller implements Initializable {
         this.stage = stage;
     }
 
+    public void shortcutSet(KeyEvent event) {
+        if (event.getCode() != null) {
+            String keyCombination = (event.isControlDown() ? "CONTROL_" : "") +
+                (event.isShiftDown() ? "SHIFT_" : "") + event.getCode().name();
+
+            Runnable action = keyActionMap.get(keyCombination);
+            if (action != null) {
+                action.run();
+            }
+        }
+    }
     /*
     private void onMousePressed(MouseEvent event) {
         orgSceneX = event.getSceneX();
