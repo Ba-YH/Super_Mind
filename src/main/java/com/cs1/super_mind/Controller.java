@@ -81,6 +81,9 @@ public class Controller implements Initializable {
     public static double orgSceneX = 500, orgSceneY = 310;
     public static double orgTranslateX, orgTranslateY;
     private Stage stage;
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
     private int number;
     private final Map<String, Runnable> keyActionMap = new HashMap<>();
 
@@ -139,6 +142,9 @@ public class Controller implements Initializable {
             CurNode.getView().getChildren().add(tmp.getView());//添加视图
             update(root, A1);
         });
+
+
+
         AddBro_Button.setOnAction(event -> {
             if (CurNode == null) {
                 setHint(Hint, "请选择一个节点");
@@ -170,6 +176,9 @@ public class Controller implements Initializable {
             CurNode.getparent().getView().getChildren().add(tmp.getView());//添加视图
             update(root, A1);
         });
+
+
+
         Del_Button.setOnAction(event -> {//删除节点按键
             if (CurNode == null) {
                 setHint(Hint, "请选择一个节点");
@@ -195,6 +204,9 @@ public class Controller implements Initializable {
             update(root, A1);
             CurNode = null;
         });
+
+
+
         left_layout_button.setOnAction(event -> {
             for (TreeNode tmp : getRchildren()) {
                 getLchildren().add(tmp);
@@ -202,6 +214,8 @@ public class Controller implements Initializable {
             getRchildren().clear();
             update(root, A1);
         });
+
+
         right_layout_button.setOnAction(event -> {
             for (TreeNode tmp : getLchildren()) {
                 getRchildren().add(tmp);
@@ -209,10 +223,14 @@ public class Controller implements Initializable {
             getLchildren().clear();
             update(root, A1);
         });
+
+
         Automatic_layout_button.setOnAction(event -> {
             GetDp();
             update(root, A1);
         });
+
+
         Open_button.setOnAction(event -> {
             Stage tmpstage = new Stage();
             FileChooser fileChooser = new FileChooser();
@@ -240,6 +258,8 @@ public class Controller implements Initializable {
                 setHint(Hint, "文件打开失败，文件已经损坏");
             }
         });
+
+
         Save_button.setOnAction(event -> {
             FileManger fm = new FileManger();
             Stage tmpstage = new Stage();
@@ -257,6 +277,8 @@ public class Controller implements Initializable {
                 setHint(Hint, "文件保存失败");
             }
         });
+
+
         New_button.setOnAction(event -> {
             RecH = 48;
             RecW = RecH * 2.25;
@@ -275,6 +297,8 @@ public class Controller implements Initializable {
             A1.getChildren().add(root);
             CurNode = null;
         });
+
+
         Export_button.setOnAction(event -> {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("导出");
@@ -290,7 +314,9 @@ public class Controller implements Initializable {
                 setHint(Hint, "导出成功");
             }
         });
-        //添加外观按钮
+
+
+
         Appearance_button.setOnAction(actionEvent -> {
             //网格布局
             GridPane gridPane = new GridPane();
@@ -368,12 +394,8 @@ public class Controller implements Initializable {
             );
 
         });
-        //鼠标悬停打开按钮
-        /*
-        File_button.setOnMouseEntered(event -> {
-            File_button.fire();
-        })
-         */
+
+
         //面板获取焦点
         Scrollpane.setOnMouseClicked(event -> {
             //收起文件菜单
@@ -430,10 +452,12 @@ public class Controller implements Initializable {
                 TreeViewItem item = (TreeViewItem) newValue;
                 int id = item.getId();
                 TreeNode findNode = find(root, id);
-                String style =
-                    "-fx-background-color:" + backgroundColor + ";-fx-background-radius:" + Integer.toString(radius) + ";";
-                String borderStyle = "-fx-border-width: 2px;-fx-control-inner-background:" + backgroundColor +
-                    ";-fx-border-color:" + borderColor + ";-fx-border-radius:" + Integer.toString(radius);
+                String style = "-fx-background-color:" + backgroundColor +
+                               ";-fx-background-radius:" + Integer.toString(radius) + ";";
+                String borderStyle = "-fx-border-width: 2px;-fx-control-inner-background:" + backgroundColor+
+                                     ";-fx-border-color:" + borderColor +
+                                     ";-fx-border-radius:" + Integer.toString(radius);
+
                 if (CurNode != null) {
                     CurNode.setStyle(style);
                 }
@@ -526,10 +550,8 @@ public class Controller implements Initializable {
         update(root, A1);
     }
 
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
 
+    //设置快捷键
     public void shortcutSet(KeyEvent event) {
         if (event.getCode() != null) {
             String keyCombination = (event.isControlDown() ? "CONTROL_" : "") +
