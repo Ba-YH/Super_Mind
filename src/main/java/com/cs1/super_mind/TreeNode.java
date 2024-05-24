@@ -179,6 +179,7 @@ public class TreeNode extends TextField implements Serializable {
         super.setPrefWidth(this.TextLen);
         super.setStyle(defaultStyle.get());
         super.setText(this.txt);
+        super.setFont(new Font(font_type,20));
         super.setEditable(false);
         //删除鼠标悬停事件，节点只有点击事件
         view = new TreeViewItem(this.txt);

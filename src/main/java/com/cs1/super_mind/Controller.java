@@ -213,7 +213,8 @@ public class Controller implements Initializable {
             fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("super_mind files", "*.smind"));
             FileManger fm = new FileManger();
             TreeNode tmp = null;
-            File file = fileChooser.showOpenDialog(tmpstage);
+            File file=fileChooser.showOpenDialog(tmpstage);
+            tmp = (TreeNode) fm.Open_File(file);
             stage.setTitle(file.getName());
             if (tmp != null) {
                 A1.getChildren().clear();
